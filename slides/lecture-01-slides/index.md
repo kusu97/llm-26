@@ -1,11 +1,10 @@
 <section class="title">
-  <div class="title-main">NLP and LLMs (CS40008.01)</div>
-  <div class="title-sub">Lecture 01 – Introduction to NLP</div>
-
+  <div class="title-main">Lecture 01 – Introduction to NLP</div>
+  <div class="title-sub">NLP and LLMs (CS40008.01)</div>
   <div class="title-meta">
     <div>Baojian Zhou</div>
-    <div>NLP and LLMs (CS40008.01)</div>
-    <div>School of Data Science, Fudan University</div>
+    <div>School of Data Science</div>
+    <div>Fudan University</div>
     <div>03/05/2026</div>
   </div>
 </section>

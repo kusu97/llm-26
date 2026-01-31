@@ -25,18 +25,18 @@
   color: var(--fudan-blue);
   font-weight: 800;
   font-size: 64px;
-  line-height: 1.15;
-  margin: 80px 20px 24px;
+  line-height: 1.2;
+  margin: 150px 20px 40px;
 }
 .title-sub{
   color: var(--fudan-blue);
   font-weight: 800;
-  font-size: 50px;
+  font-size: 45px;
   line-height: 1.08;
   margin: 0;
 }
 .title-meta{
-  margin-top: 210px;
+  margin-top: 150px;
   color: var(--fudan-blue);
   font-weight: 700;
   font-size: 34px;
@@ -44,7 +44,25 @@
 }
 
 /* PPT SLIDE HEADER */
-.ppt{ padding: 6px 6px; }
+.ppt{ 
+  padding: 6px 6px 6px 10px; 
+  margin-left: 0;
+}
+.reveal .slides section.ppt {
+  padding-left: 10px;
+  padding-right: 40px;
+}
+
+/* Reduce left padding on nested lists in PPT slides */
+.ppt ul {
+  padding-left: 0.05em;
+}
+.ppt ul ul {
+  padding-left: 0.05em;
+}
+.ppt ul ul ul {
+  padding-left: 0.05em;
+}
 .ppt-title{
   font-size: 64px;
   font-weight: 800;
@@ -93,4 +111,13 @@
 .outline-bullets.med li,
 .outline-bullets.small li{
   margin: 10px 0;
+}
+
+/* Text color utilities */
+.text-green { color: #28a745; }
+.text-red { color: #dc3545; }
+
+/* Spaced list items */
+.spaced-list li {
+  margin-bottom: 12px;
 }
