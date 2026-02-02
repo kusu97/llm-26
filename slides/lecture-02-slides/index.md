@@ -987,6 +987,76 @@
 
 ---
 
+
+<section class="ppt">
+  <div class="ppt-title">Motivation: zero probabilities</div>
+  <div class="ppt-line"></div>
+  <div style="font-size: 30px; line-height: 1.22; font-weight: 560; margin-top: 14px;">
+    <ul style="margin-top: 0; padding-left: 28px;">
+      <li data-fragment-index="1">
+        <b>Maximum Likelihood Estimate (trigram):</b>
+        \[
+          q(w_i \mid w_{i-2}w_{i-1})
+          = \frac{C(w_{i-2}w_{i-1}w_i)}{C(w_{i-2}w_{i-1})}
+        \]
+      </li>
+      <li data-fragment-index="2" style="margin-top: 8px;">
+        Given the following datasets
+      </li>
+    </ul>
+    <div class="fragment" data-fragment-index="3"
+     style="display:flex; gap:32px; margin: 10px 0 8px 0; align-items: stretch;">
+  <!-- Training set -->
+  <div style="
+    flex: 1;
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+  ">
+    <div style="font-size: 34px; font-weight: 900; margin-bottom: 10px;">
+      <span class="text-green">Training set</span>
+    </div>
+    <div style="font-size: 30px; line-height: 1.25; font-weight: 650;">
+      <div style="margin: 8px 0; color:#3d67c7;">... denied the allegations</div>
+      <div style="margin: 8px 0; color:#3d67c7;">... denied the reports</div>
+      <div style="margin: 8px 0; color:#3d67c7;">... denied the claims</div>
+      <div style="margin: 8px 0; color:#3d67c7;">... denied the request</div>
+    </div>
+  </div>
+  <!-- Test set -->
+  <div style="
+    flex: 1;
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+  ">
+    <div style="font-size: 34px; font-weight: 900; margin-bottom: 10px;">
+      <span class="text-green">Test set</span>
+    </div>
+    <div style="font-size: 30px; line-height: 1.25; font-weight: 650;">
+      <div style="margin: 8px 0; color:#d62728;">... denied the offer</div>
+      <div style="margin: 8px 0; color:#d62728;">... denied the loan</div>
+      <div style="margin-top: 14px; font-size: 32px; font-weight: 900; color:#d62728;">
+        \(P(\text{offer} \mid \text{denied the})\) ?
+      </div>
+    </div>
+  </div>
+</div>
+    <ul style="margin-top: 4px; padding-left: 28px;">
+      <li class="fragment" data-fragment-index="4" style="margin-top: 10px;">
+        Trigrams can have <b>zero probability</b> (unseen \(n\)-grams ⇒ assign 0).
+      </li>
+      <li class="fragment" data-fragment-index="5" style="margin-top: 8px;">
+        <b>Question:</b> how to avoid these zeros?
+      </li>
+    </ul>
+  </div>
+</section>
+
+---
+
 <section class="ppt">
   <div class="ppt-title">Smoothing: intuition</div>
   <div class="ppt-line"></div>
@@ -1008,6 +1078,9 @@
         </li>
         <li class="fragment" data-fragment-index="6" style="margin-top: 10px;">
           <b>How to steal?</b>
+          <li class="fragment" data-fragment-index="7" style="margin-top: 10px;">
+            Additive smoothing<br>Linear interpolation<br>Backoff smoothing (Katz)<br>KN Smoothing Good-Turing<br>
+          </li>
         </li>
       </ul>
     </div>
@@ -1147,6 +1220,716 @@
 ---
 
 <section class="ppt">
+  <div class="ppt-title">Additive smoothing (Laplace / Add-\(\delta\))</div>
+  <div class="ppt-line"></div>
+
+  <!-- Top: two panels side-by-side -->
+  <div style="display:flex; gap:22px; align-items:stretch; margin-top: 10px;">
+    <!-- Left-top: Add-one -->
+    <div style="
+      flex: 1;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 14px;
+      padding: 14px 16px;
+    ">
+      <div style="font-size: 30px; font-weight: 900; margin-bottom: 10px;">
+        1) Add-one (Laplace) idea
+      </div>
+      <div style="font-size: 24px; line-height: 1.25;">
+        <div style="font-weight: 800; margin-bottom: 6px;">MLE estimate</div>
+        \[
+          P_{\text{MLE}}(w_i\mid w_{i-1}) =\frac{C(w_{i-1}w_i)}{C(w_{i-1})}
+        \]
+        <div style="margin-top: 10px; font-weight: 800;">
+          <span class="text-green">pretend we saw each word one more time</span> 
+        </div>
+        \[
+          P_{\text{Add}}(w_i\mid w_{i-1}) = \frac{C(w_{i-1}w_i)+1}{C(w_{i-1})+|V|}
+        \]
+      </div>
+    </div>
+    <!-- Right-top: Reconstituted counts -->
+    <div style="
+      flex: 1;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 14px;
+      padding: 14px 16px;
+    ">
+      <div style="font-size: 30px; font-weight: 900; margin-bottom: 10px;">
+        2) View as pseudo-counts \(C^{*}\)
+      </div>
+      <div style="font-size: 20px; line-height: 1.25;">
+        <div style="margin-bottom: 8px;">
+          “Reconstitute” <span class="text-green" style="font-weight: 900;">pseudo-counts</span> from smoothed probabilities.
+        </div>
+        <div style="font-weight: 800; margin: 8px 0 6px;">Unigrams (train size \(N\))</div>
+        \[
+          C^{*}(w_i) = P_{\text{Add}}(w_i)\cdot N
+          = \frac{C(w_i)+1}{N+|V|}\cdot N
+        \]
+        <div style="font-weight: 800; margin: 10px 0 6px;">Bigrams</div>
+        \begin{align}
+          C^{*}(w_{i-1}w_i) &= P_{\text{Add}}(w_i\mid w_{i-1})\cdot C(w_{i-1})\\
+          &= \frac{C(w_{i-1}w_i)+1}{C(w_{i-1})+|V|}\cdot C(w_{i-1})
+        \end{align}
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom: Add-delta generalization -->
+  <div style="
+    margin-top: 18px;
+    background: rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+  ">
+    <div style="display:flex; align-items:flex-start; gap:18px;">
+      <div style="flex: 1.2;">
+        <div style="font-size: 30px; font-weight: 900; margin-bottom: 8px;">
+          3) Generalization: Add-\(\delta\) smoothing
+        </div>
+        <div style="font-size: 24px; line-height: 1.25;">
+          Add-one is often too aggressive. Use <span class="text-red" style="font-weight: 900;">Add-\(\delta\)</span>
+          (typically \(0<\delta\le 1\)).
+        </div>
+      </div>
+      <div style="
+        flex: 1.4;
+        background: rgba(255,255,255,0.7);
+        border: 1px solid rgba(0,0,0,0.10);
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-size: 26px;
+        font-weight: 650;
+      ">
+        \[
+          P_{\text{Add}}(w_i\mid w_{i-1})
+          =\frac{C(w_{i-1}w_i)+\delta}{\sum_{w\in V}\big(C(w_{i-1}w)+\delta\big)}
+          =\frac{C(w_{i-1}w_i)+\delta}{C(w_{i-1})+\delta|V|}
+        \]
+        <div style="margin-top: 6px; font-size: 22px; opacity: 0.95;">
+          Still simple — better methods (backoff / interpolation) usually work better.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+---
+
+<section class="ppt">
+  <div class="ppt-title">Additive smoothing example</div>
+  <div class="ppt-line"></div>
+
+  <!-- IMPORTANT: relative container so the overlay can position inside -->
+  <div style="position: relative;">
+    <!-- ===== Row 1: two count tables (normal content) ===== -->
+    <div style="display:flex; gap:12px; align-items:stretch; margin-top: 10px;">
+      <div style="flex:1; background:rgba(0,0,0,0.05); border:1px solid rgba(0,0,0,0.12);
+                  border-radius:14px; padding:15px 14px;">
+        <div style="font-size:26px; font-weight:900; margin-bottom:8px;">
+          Bigram counts \(C(w_{i-1}w_i)\)
+        </div>
+        <table style="width:100%; border-collapse: collapse; font-size: 18px;">
+          <thead>
+            <tr style="background:#3d67c7; color:white;">
+              <th style="padding:6px 8px;"></th>
+              <th style="padding:6px 8px;">i</th>
+              <th style="padding:6px 8px;">want</th>
+              <th style="padding:6px 8px;">to</th>
+              <th style="padding:6px 8px;">eat</th>
+              <th style="padding:6px 8px;">chinese</th>
+              <th style="padding:6px 8px;">food</th>
+              <th style="padding:6px 8px;">lunch</th>
+              <th style="padding:6px 8px;">spend</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:16px 8px; font-weight:800;">i</td><td style="text-align:center;">5</td><td style="text-align:center;">827</td><td style="text-align:center;">0</td><td style="text-align:center;">9</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td><td style="text-align:center;">2</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">want</td><td style="text-align:center;">2</td><td style="text-align:center;">0</td><td style="text-align:center;">608</td><td style="text-align:center;">1</td><td style="text-align:center;">6</td><td style="text-align:center;">6</td><td style="text-align:center;">5</td><td style="text-align:center;">1</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">to</td><td style="text-align:center;">2</td><td style="text-align:center;">0</td><td style="text-align:center;">4</td><td style="text-align:center;">686</td><td style="text-align:center;">2</td><td style="text-align:center;">0</td><td style="text-align:center;">6</td><td style="text-align:center;">211</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">eat</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td><td style="text-align:center;">2</td><td style="text-align:center;">0</td><td style="text-align:center;">16</td><td style="text-align:center;">2</td><td style="text-align:center;">42</td><td style="text-align:center;">0</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">chinese</td><td style="text-align:center;">1</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td><td style="text-align:center;">82</td><td style="text-align:center;">1</td><td style="text-align:center;">0</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">food</td><td style="text-align:center;">15</td><td style="text-align:center;">0</td><td style="text-align:center;">15</td><td style="text-align:center;">0</td><td style="text-align:center;">1</td><td style="text-align:center;">4</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">lunch</td><td style="text-align:center;">2</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td><td style="text-align:center;">1</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">spend</td><td style="text-align:center;">1</td><td style="text-align:center;">0</td><td style="text-align:center;">1</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td><td style="text-align:center;">0</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="flex:1; background:rgba(0,0,0,0.05); border:1px solid rgba(0,0,0,0.12);
+                  border-radius:14px; padding:12px 14px;">
+        <div style="font-size:26px; font-weight:900; margin-bottom:8px;">
+          Laplace counts \(C(w_{i-1}w_i)+1\)
+        </div>
+        <table style="width:100%; border-collapse: collapse; font-size: 18px;">
+          <thead>
+            <tr style="background:#3d67c7; color:white;">
+              <th style="padding:6px 8px;"></th>
+              <th style="padding:6px 8px;">i</th>
+              <th style="padding:6px 8px;">want</th>
+              <th style="padding:6px 8px;">to</th>
+              <th style="padding:6px 8px;">eat</th>
+              <th style="padding:6px 8px;">chinese</th>
+              <th style="padding:6px 8px;">food</th>
+              <th style="padding:6px 8px;">lunch</th>
+              <th style="padding:6px 8px;">spend</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:16px 8px; font-weight:800;">i</td><td style="text-align:center;">6</td><td style="text-align:center;">828</td><td style="text-align:center;">1</td><td style="text-align:center;">10</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td><td style="text-align:center;">3</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">want</td><td style="text-align:center;">3</td><td style="text-align:center;">1</td><td style="text-align:center;">609</td><td style="text-align:center;">2</td><td style="text-align:center;">7</td><td style="text-align:center;">7</td><td style="text-align:center;">6</td><td style="text-align:center;">2</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">to</td><td style="text-align:center;">3</td><td style="text-align:center;">1</td><td style="text-align:center;">5</td><td style="text-align:center;">687</td><td style="text-align:center;">3</td><td style="text-align:center;">1</td><td style="text-align:center;">7</td><td style="text-align:center;">212</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">eat</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td><td style="text-align:center;">3</td><td style="text-align:center;">1</td><td style="text-align:center;">17</td><td style="text-align:center;">3</td><td style="text-align:center;">43</td><td style="text-align:center;">1</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">chinese</td><td style="text-align:center;">2</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td><td style="text-align:center;">83</td><td style="text-align:center;">2</td><td style="text-align:center;">1</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">food</td><td style="text-align:center;">16</td><td style="text-align:center;">1</td><td style="text-align:center;">16</td><td style="text-align:center;">1</td><td style="text-align:center;">2</td><td style="text-align:center;">5</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">lunch</td><td style="text-align:center;">3</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td><td style="text-align:center;">2</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td></tr>
+            <tr><td style="padding:16px 8px; font-weight:800;">spend</td><td style="text-align:center;">2</td><td style="text-align:center;">1</td><td style="text-align:center;">2</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td><td style="text-align:center;">1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- ===== OVERLAY: Laplace probability table (appears on top) ===== -->
+    <div class="fragment" data-fragment-index="2"
+         style="
+           position: absolute;
+           left: 50%;
+           top: 0px;                 /* adjust if you want lower */
+           transform: translateX(-50%);
+           width: 96%;
+           z-index: 50;
+           background: rgba(255,255,255,0.96);
+           border: 2px solid rgba(0,0,0,0.18);
+           border-radius: 16px;
+           box-shadow: 0 10px 40px rgba(0,0,0,0.20);
+           padding: 14px 16px;
+         ">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+        <div style="font-size:26px; font-weight:900;">
+          Using Laplace smoothing: $P_{\text{Lap}}(w_i\mid w_{i-1})=\frac{C(w_{i-1}w_i)+1}{C(w_{i-1})+|V|}$
+        </div>
+      </div>
+      <div style="overflow:auto; max-height: 560px; margin-top: 8px;">
+        <table style="width:100%; border-collapse: collapse; font-size: 18px;">
+        <thead>
+          <tr style="background:#3d67c7; color:white;">
+            <th style="padding:6px 8px;"></th>
+            <th style="padding:6px 8px;">i</th>
+            <th style="padding:6px 8px;">want</th>
+            <th style="padding:6px 8px;">to</th>
+            <th style="padding:6px 8px;">eat</th>
+            <th style="padding:6px 8px;">chinese</th>
+            <th style="padding:6px 8px;">food</th>
+            <th style="padding:6px 8px;">lunch</th>
+            <th style="padding:6px 8px;">spend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- (Example numbers; replace with your computed table if desired) -->
+          <tr><td style="padding:16px 8px; font-weight:800;">i</td><td style="text-align:center;">0.0015</td><td style="text-align:center;">0.21</td><td style="text-align:center;">0.00025</td><td style="text-align:center;">0.0025</td><td style="text-align:center;">0.00025</td><td style="text-align:center;">0.00025</td><td style="text-align:center;">0.00025</td><td style="text-align:center;">0.00075</td></tr>
+          <tr><td style="padding:16px 8px; font-weight:800;">want</td><td style="text-align:center;">0.0013</td><td style="text-align:center;">0.00042</td><td style="text-align:center;">0.26</td><td style="text-align:center;">0.00084</td><td style="text-align:center;">0.0029</td><td style="text-align:center;">0.0029</td><td style="text-align:center;">0.0025</td><td style="text-align:center;">0.00084</td></tr>
+          <tr><td style="padding:16px 8px; font-weight:800;">to</td><td style="text-align:center;">0.00078</td><td style="text-align:center;">0.00026</td><td style="text-align:center;">0.0013</td><td style="text-align:center;">0.18</td><td style="text-align:center;">0.00078</td><td style="text-align:center;">0.00026</td><td style="text-align:center;">0.0018</td><td style="text-align:center;">0.055</td></tr>
+          <tr><td style="padding:16px 8px; font-weight:800;">eat</td><td style="text-align:center;">0.00046</td><td style="text-align:center;">0.00046</td><td style="text-align:center;">0.0014</td><td style="text-align:center;">0.00046</td><td style="text-align:center;">0.0078</td><td style="text-align:center;">0.0014</td><td style="text-align:center;">0.02</td><td style="text-align:center;">0.00046</td></tr>
+          <tr><td style="padding:16px 8px; font-weight:800;">chinese</td><td style="text-align:center;">0.0012</td><td style="text-align:center;">0.00062</td><td style="text-align:center;">0.00062</td><td style="text-align:center;">0.00062</td><td style="text-align:center;">0.00062</td><td style="text-align:center;">0.052</td><td style="text-align:center;">0.0012</td><td style="text-align:center;">0.00062</td></tr>
+          <tr><td style="padding:16px 8px; font-weight:800;">food</td><td style="text-align:center;">0.0063</td><td style="text-align:center;">0.00039</td><td style="text-align:center;">0.0063</td><td style="text-align:center;">0.00039</td><td style="text-align:center;">0.00079</td><td style="text-align:center;">0.002</td><td style="text-align:center;">0.00039</td><td style="text-align:center;">0.00039</td></tr>
+          <tr><td style="padding:16px 8px; font-weight:800;">lunch</td><td style="text-align:center;">0.0017</td><td style="text-align:center;">0.00056</td><td style="text-align:center;">0.00056</td><td style="text-align:center;">0.00056</td><td style="text-align:center;">0.00056</td><td style="text-align:center;">0.0011</td><td style="text-align:center;">0.00056</td><td style="text-align:center;">0.00056</td></tr>
+          <tr><td style="padding:16px 8px; font-weight:800;">spend</td><td style="text-align:center;">0.0012</td><td style="text-align:center;">0.00058</td><td style="text-align:center;">0.0012</td><td style="text-align:center;">0.00058</td><td style="text-align:center;">0.00058</td><td style="text-align:center;">0.00058</td><td style="text-align:center;">0.00058</td><td style="text-align:center;">0.00058</td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+---
+
+<section class="ppt">
+  <div class="ppt-title">Additive smoothing: reconstituted counts</div>
+  <div class="ppt-line"></div>
+
+  <style>
+    table.ngram {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 18px;
+    }
+    table.ngram th, table.ngram td {
+      border: 1px solid rgba(0,0,0,0.18);
+      padding: 6px 8px;
+      text-align: center;
+      vertical-align: middle;
+    }
+    table.ngram thead th {
+      background: #3d67c7;
+      color: white;
+      font-weight: 900;
+    }
+    table.ngram tbody th {
+      background: rgba(61,103,199,0.10);
+      font-weight: 900;
+      text-align: left;
+      padding-left: 10px;
+    }
+    .hl {
+      outline: 3px solid #d62728;
+      outline-offset: -3px;
+      border-radius: 6px;
+      font-weight: 900;
+    }
+    .note {
+      font-size: 28px;
+      font-weight: 900;
+      color: #1f6feb;
+      margin-top: 10px;
+      text-align: center;
+    }
+  </style>
+
+  <div style="display:flex; gap:22px; align-items:flex-start; margin-top: 12px;">
+    <!-- Before -->
+    <div style="flex:1; background:rgba(0,0,0,0.05); border:1px solid rgba(0,0,0,0.12);
+                border-radius:14px; padding:12px 14px;">
+      <div style="font-size: 26px; font-weight: 900; margin-bottom: 8px;">
+        Before Add-one smoothing
+      </div>
+      <table class="ngram">
+        <thead>
+          <tr>
+            <th></th><th>i</th><th>want</th><th>to</th><th>eat</th><th>chinese</th><th>food</th><th>lunch</th><th>spend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>i</th><td>5</td><td class="hl">827</td><td>0</td><td>9</td><td>0</td><td>0</td><td>0</td><td>2</td></tr>
+          <tr><th>want</th><td>2</td><td>0</td><td class="hl">608</td><td>1</td><td>6</td><td>6</td><td>5</td><td>1</td></tr>
+          <tr><th>to</th><td>2</td><td>0</td><td>4</td><td>686</td><td>2</td><td>0</td><td>6</td><td>211</td></tr>
+          <tr><th>eat</th><td>0</td><td>0</td><td>2</td><td>0</td><td>16</td><td>2</td><td>42</td><td>0</td></tr>
+          <tr><th>chinese</th><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>82</td><td>1</td><td>0</td></tr>
+          <tr><th>food</th><td>15</td><td>0</td><td>15</td><td>0</td><td>1</td><td>4</td><td>0</td><td>0</td></tr>
+          <tr><th>lunch</th><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+          <tr><th>spend</th><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- After -->
+    <div style="flex:1; background:rgba(0,0,0,0.05); border:1px solid rgba(0,0,0,0.12);
+                border-radius:14px; padding:12px 14px;">
+      <div style="font-size: 26px; font-weight: 900; margin-bottom: 8px;">
+        After Add-one smoothing (reconstituted counts)
+      </div>
+      <table class="ngram">
+        <thead>
+          <tr>
+            <th></th><th>i</th><th>want</th><th>to</th><th>eat</th><th>chinese</th><th>food</th><th>lunch</th><th>spend</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th>i</th><td>3.8</td><td class="hl">527</td><td>0.64</td><td>6.4</td><td>0.64</td><td>0.64</td><td>0.64</td><td>1.9</td></tr>
+          <tr><th>want</th><td>1.2</td><td>0.39</td><td class="hl">238</td><td>0.78</td><td>2.7</td><td>2.7</td><td>2.3</td><td>0.78</td></tr>
+          <tr><th>to</th><td>1.9</td><td>0.63</td><td>3.1</td><td>430</td><td>1.9</td><td>0.63</td><td>4.4</td><td>133</td></tr>
+          <tr><th>eat</th><td>0.34</td><td>0.34</td><td>1</td><td>0.34</td><td>5.8</td><td>1</td><td>15</td><td>0.34</td></tr>
+          <tr><th>chinese</th><td>0.2</td><td>0.098</td><td>0.098</td><td>0.098</td><td>0.098</td><td>8.2</td><td>0.2</td><td>0.098</td></tr>
+          <tr><th>food</th><td>6.9</td><td>0.43</td><td>6.9</td><td>0.43</td><td>0.86</td><td>2.2</td><td>0.43</td><td>0.43</td></tr>
+          <tr><th>lunch</th><td>0.57</td><td>0.19</td><td>0.19</td><td>0.19</td><td>0.19</td><td>0.38</td><td>0.19</td><td>0.19</td></tr>
+          <tr><th>spend</th><td>0.32</td><td>0.16</td><td>0.32</td><td>0.16</td><td>0.16</td><td>0.16</td><td>0.16</td><td>0.16</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="note">Some counts changed too much!</div>
+</section>
+
+---
+
+<section class="ppt">
+  <div class="ppt-title">Linear interpolation</div>
+  <div class="ppt-line"></div>
+
+  <!-- Row 1: bigram interpolation (full width) -->
+  <div style="
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-top: 10px;
+  ">
+    <div style="font-size: 28px; line-height: 1.25; font-weight: 560;">
+      <div style="font-weight: 900; font-size: 30px; margin-bottom: 8px;">
+        Bigram case
+      </div>
+      <ul style="margin: 0; padding-left: 26px;">
+        <li>
+          If some bigrams are unseen (e.g., \(C(\text{burnish the})=0\)), MLE gives zero:
+          \(\;P(\text{the}\mid \text{burnish})=0\).
+        </li>
+        <li style="margin-top: 6px;">
+          Combine higher-order and lower-order information via <b>linear interpolation</b> (Mercer, 1980):
+        </li>
+      </ul>
+      <div style="
+        margin-top: 10px;
+        background: rgba(255,255,255,0.70);
+        border: 1px solid rgba(0,0,0,0.10);
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 28px;
+        font-weight: 650;
+      ">
+        \[
+          P_{\text{Int}}(w_n\mid w_{n-1})
+          = \lambda\cdot P(w_n\mid w_{n-1}) + (1-\lambda)\cdot P(w_n)
+        \]
+      </div>
+    </div>
+  </div>
+  <!-- Row 2: trigram interpolation + how to set lambdas (side-by-side) -->
+  <div style="display:flex; gap:22px; margin-top: 16px; align-items:stretch;">
+    <!-- Left: trigram interpolation formula -->
+    <div style="
+      flex: 1;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 14px;
+      padding: 14px 16px;
+    ">
+      <div style="font-size: 30px; font-weight: 900; margin-bottom: 8px;">
+        Interpolation for trigram
+      </div>
+      <div style="font-size: 24px; line-height: 1.25; margin-bottom: 8px;">
+        Mix unigram + bigram + trigram (with \(\sum_i \lambda_i=1\)):
+      </div>
+      <div style="
+        background: rgba(255,255,255,0.70);
+        border: 1px solid rgba(0,0,0,0.10);
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 26px;
+        font-weight: 650;
+      ">
+        \begin{align}
+          P_{\lambda_1,\lambda_2,\lambda_3}(w_n\mid w_{n-2}w_{n-1})
+          &= \lambda_1 P(w_n\mid w_{n-2}w_{n-1}) \\
+          &+ \lambda_2 P(w_n\mid w_{n-1}) \\
+          &+ \lambda_3 P(w_n)
+        \end{align}
+      </div>
+      <div style="margin-top: 10px; font-size: 30px; font-weight: 900; color:#d62728;">
+        How to set \(\lambda_i\)?
+      </div>
+    </div>
+    <!-- Right: held-out tuning -->
+    <div style="
+      flex: 1;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 14px;
+      padding: 14px 16px;
+    ">
+      <div style="font-size: 30px; font-weight: 900; margin-bottom: 8px;">
+        Tune $\{\lambda_1,\lambda_2,\lambda_3\}$ on held-out data
+      </div>
+      <div style="
+        width: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+        display: flex;
+        border: 1px solid rgba(0,0,0,0.12);
+        height: 64px;
+        margin: 6px 0 12px 0;
+      ">
+        <div style="flex: 6.5; background:#f2f2f2; display:flex; align-items:center; justify-content:center; font-size: 15px; font-weight:900;">
+          Training
+        </div>
+        <div style="flex: 2.7; background:#e6f2dc; display:flex; align-items:center; justify-content:center; font-size: 15px; font-weight:900;">
+          Held-out
+        </div>
+        <div style="flex: 2.7; background:#dfe9f7; display:flex; align-items:center; justify-content:center; font-size: 15px; font-weight:900;">
+          Test
+        </div>
+      </div>
+      <ul style="font-size: 24px; line-height: 1.25; margin: 0; padding-left: 26px;">
+        <li>Fix \(N\)-gram probabilities estimated on training data</li>
+        <li style="margin-top: 6px;">Choose \(\lambda_i\) to maximize held-out log-likelihood:</li>
+      </ul>
+      <div style="
+        margin-top: 10px;
+        background: rgba(255,255,255,0.70);
+        border: 1px solid rgba(0,0,0,0.10);
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 26px;
+        font-weight: 650;
+      ">
+        \[
+          \max_{\lambda_1,\lambda_2,\lambda_3}\;
+          \sum_{i}\log P_{\lambda_1,\lambda_2,\lambda_3}(w_i\mid w_{i-2}w_{i-1})
+        \]
+      </div>
+    </div>
+
+  </div>
+</section>
+
+---
+
+<section class="ppt">
+  <div class="ppt-title">Language model toolkits and readings</div>
+  <div class="ppt-line"></div>
+
+- When we have sparse statistics
+
+<div class="smoothing-row">
+  <div class="smoothing-left">
+    $q(\mathbf{w}\mid \text{denied the})$
+  </div>
+
+  <div class="smoothing-right">
+    <!-- Top bar chart -->
+    <svg viewBox="0 0 860 190" width="100%" height="190" role="img" aria-label="Sparse counts">
+      <!-- counts on top -->
+      <text x="118" y="26" font-size="26" font-weight="700">3</text>
+      <text x="228" y="26" font-size="26" font-weight="700">2</text>
+      <text x="338" y="26" font-size="26" font-weight="700">1</text>
+      <text x="448" y="26" font-size="26" font-weight="700">1</text>
+      <text x="558" y="26" font-size="26" font-weight="700">0</text>
+      <text x="668" y="26" font-size="26" font-weight="700">0</text>
+      <text x="778" y="26" font-size="26" font-weight="700">0</text>
+      <text x="828" y="26" font-size="26" font-weight="700">…</text>
+      <!-- bars (baseline y=170) -->
+      <!-- allegations: 3 -->
+      <rect x="90"  y="40" width="70" height="130" fill="var(--bar)" stroke="#111" stroke-width="2"/>
+      <!-- reports: 2 -->
+      <rect x="200" y="80" width="70" height="90"  fill="var(--bar)" stroke="#111" stroke-width="2"/>
+      <!-- claims: 1 -->
+      <rect x="310" y="120" width="70" height="50" fill="var(--bar2)" stroke="#111" stroke-width="2"/>
+      <!-- request: 1 -->
+      <rect x="420" y="120" width="70" height="50" fill="var(--bar2)" stroke="#111" stroke-width="2"/>
+      <!-- rotated labels under bars / tokens -->
+      <g font-size="28" font-weight="650">
+        <text x="120" y="178" transform="rotate(-90 120 178)">allegations</text>
+        <text x="235" y="178" transform="rotate(-90 235 178)">reports</text>
+        <text x="345" y="178" transform="rotate(-90 345 178)">claims</text>
+        <text x="455" y="178" transform="rotate(-90 455 178)">request</text>
+        <text x="565" y="178" transform="rotate(-90 565 178)">attack</text>
+        <text x="675" y="178" transform="rotate(-90 675 178)">man</text>
+        <text x="785" y="178" transform="rotate(-90 785 178)">outcome</text>
+        <text x="895" y="178" transform="rotate(-90 845 178)">…</text>
+      </g>
+    </svg>
+  </div>
+</div>
+
+- Steal probability mass to generalize better
+
+<div class="smoothing-row" style="margin-top:6px;">
+  <div class="smoothing-left prob-block">
+    <div style="font-weight:800; margin-bottom:4px;">$P(\mathbf{w}\mid \text{denied the})$</div>
+    <div>2.5&nbsp;&nbsp;allegations</div>
+    <div>1.5&nbsp;&nbsp;reports</div>
+    <div>0.5&nbsp;&nbsp;claims</div>
+    <div>0.5&nbsp;&nbsp;request</div>
+    <div class="other">2&nbsp;&nbsp;&nbsp;&nbsp;other</div>
+  </div>
+
+  <div class="smoothing-right">
+    <!-- Bottom bar chart (smoothed) -->
+    <svg viewBox="0 0 860 210" width="100%" height="210" role="img" aria-label="Smoothed probabilities">
+      <!-- bars (baseline y=190) -->
+      <rect x="90"  y="55"  width="70" height="135" fill="var(--bar)"  stroke="#111" stroke-width="2"/>
+      <rect x="200" y="85"  width="70" height="105" fill="var(--bar)"  stroke="#111" stroke-width="2"/>
+      <rect x="310" y="135" width="70" height="55"  fill="var(--bar2)" stroke="#111" stroke-width="2"/>
+      <rect x="420" y="135" width="70" height="55"  fill="var(--bar2)" stroke="#111" stroke-width="2"/>
+      <!-- small green mass for "other" spread -->
+      <rect x="530" y="170" width="70" height="20" fill="var(--other)" stroke="#111" stroke-width="2"/>
+      <rect x="640" y="170" width="70" height="20" fill="var(--other)" stroke="#111" stroke-width="2"/>
+      <rect x="750" y="170" width="70" height="20" fill="var(--other)" stroke="#111" stroke-width="2"/>
+      <!-- labels -->
+      <g font-size="28" font-weight="650">
+        <text x="125" y="202" transform="rotate(-90 125 202)">allegations</text>
+        <text x="235" y="202" transform="rotate(-90 235 202)">reports</text>
+        <text x="345" y="202" transform="rotate(-90 345 202)">claims</text>
+        <text x="455" y="202" transform="rotate(-90 455 202)">request</text>
+        <text x="565" y="202" transform="rotate(-90 565 202)">attack</text>
+        <text x="675" y="202" transform="rotate(-90 675 202)">man</text>
+        <text x="785" y="202" transform="rotate(-90 785 202)">outcome</text>
+        <text x="845" y="202" transform="rotate(-90 845 202)">…</text>
+      </g>
+    </svg>
+  </div>
+</div>
+
+- How to steal?
+
+</section>
+
+---
+
+<section class="ppt">
+  <div class="ppt-title">KN smoothing: from Good–Turing to Kneser–Ney</div>
+  <div class="ppt-line"></div>
+  <!-- Row 1: two panels side-by-side -->
+  <div style="display:flex; gap:22px; align-items:stretch; margin-top: 10px;">
+    <!-- Left: toy intuition (balls) -->
+    <div style="
+      flex: 1;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 14px;
+      padding: 14px 16px;
+    ">
+      <div style="font-size: 30px; font-weight: 900; margin-bottom: 10px;">
+        Good–Turing intuition
+      </div>
+      <ul style="font-size: 24px; line-height: 1.25; margin: 0; padding-left: 26px;">
+        <li>Pick balls from a box (colors = events)</li>
+        <li style="margin-top: 6px;">Observed counts:</li>
+      </ul>
+      <div style="display:flex; gap:14px; margin-top: 10px; font-size: 24px; line-height:1.25;">
+        <div style="flex:1;">
+          <div>10 red</div>
+          <div>3 blue</div>
+          <div>2 white</div>
+        </div>
+        <div style="flex:1;">
+          <div style="color:#d62728; font-weight:900;">1 yellow</div>
+          <div style="color:#d62728; font-weight:900;">1 black</div>
+          <div style="color:#d62728; font-weight:900;">1 green</div>
+        </div>
+      </div>
+      <div style="
+        margin-top: 14px;
+        background: rgba(255,255,255,0.70);
+        border: 1px solid rgba(0,0,0,0.10);
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-size: 24px;
+        line-height: 1.25;
+        font-weight: 650;
+      ">
+        Question: how likely is the next ball <span class="text-blue"><b>new color</b></span> (e.g., pink)?
+      </div>
+      <div style="font-size: 24px; font-weight: 900; margin-bottom: 10px;">
+        Frequency-of-frequency
+        <div style="margin-bottom: 8px;">
+          \(N_r\): number of types seen exactly \(r\) times
+        </div>
+      </div>
+    </div>
+    <!-- Right: frequency-of-frequency + r* -->
+    <div style="
+      flex: 1;
+      background: rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 14px;
+      padding: 14px 16px;
+    ">
+      <div style="font-size: 24px; line-height: 1.25;">
+        <div style="
+          background: rgba(255,255,255,0.70);
+          border: 1px solid rgba(0,0,0,0.10);
+          border-radius: 12px;
+          padding: 10px 12px;
+          margin: 10px 0 12px 0;
+          font-size: 22px;
+        ">
+          Example text: <span class="text-red" style="font-weight:900;">Sam I am I am Sam I do not eat</span>
+        </div>
+        <div style="display:flex; gap:18px; align-items:flex-start;">
+          <!-- small unigram table -->
+          <div style="flex: 0.9;">
+            <table style="width:100%; border-collapse:collapse; font-size: 20px;">
+              <thead>
+                <tr style="background:#3d67c7; color:white;">
+                  <th style="padding:6px 8px; text-align:center;">Unigram</th>
+                  <th style="padding:6px 8px; text-align:center;">Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td style="padding:6px 8px; text-align:center; font-weight:800;">I</td><td style="padding:6px 8px; text-align:center;">3</td></tr>
+                <tr><td style="padding:6px 8px; text-align:center; font-weight:800;">Sam</td><td style="padding:6px 8px; text-align:center;">2</td></tr>
+                <tr><td style="padding:6px 8px; text-align:center; font-weight:800;">am</td><td style="padding:6px 8px; text-align:center;">2</td></tr>
+                <tr><td style="padding:6px 8px; text-align:center; font-weight:800;">do</td><td style="padding:6px 8px; text-align:center;">1</td></tr>
+                <tr><td style="padding:6px 8px; text-align:center; font-weight:800;">not</td><td style="padding:6px 8px; text-align:center;">1</td></tr>
+                <tr><td style="padding:6px 8px; text-align:center; font-weight:800;">eat</td><td style="padding:6px 8px; text-align:center;">1</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- N_r and formulas -->
+          <div style="flex: 1.1; font-size: 22px; line-height: 1.25;">
+            <div style="margin-top: 2px;">
+              \(N_0=3,\; N_1=3,\; N_2=2,\; N_3=1\)
+            </div>
+            <div style="
+              margin-top: 10px;
+              background: rgba(255,255,255,0.70);
+              border: 1px solid rgba(0,0,0,0.10);
+              border-radius: 12px;
+              padding: 10px 12px;
+              font-size: 22px;
+              font-weight: 650;
+            ">
+              \begin{align}
+                & r^{*} =\frac{(r+1)N_{r+1}}{N_r}, \\
+                & P^{*}_{\text{GT}}(w) =\frac{r^{*}}{N}
+              \end{align}
+            </div>
+            <div style="margin-top: 8px; color:#1f6feb; font-weight:800;">
+              (Show \(P^{*}_{\text{GT}}\) is a distribution!)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<div style="display:flex; gap:22px; align-items:stretch; margin-top: 10px;">
+    <!-- Left: toy intuition (balls) -->
+    <div style="
+    margin-top: 16px;
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+  ">
+    <div style="font-size: 20px; font-weight: 900; margin-bottom: 10px;">
+      Kneser–Ney smoothing (idea): From Good–Turing, we often <b>discount</b> observed counts by a constant \(d\),
+      then redistribute the leftover mass via interpolation.
+    </div>
+    <div style="
+      margin-top: 10px;
+      background: rgba(255,255,255,0.70);
+      border: 1px solid rgba(0,0,0,0.10);
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-size: 26px;
+      font-weight: 650;
+    ">
+      \[
+        P_{\text{KN}}(w_i\mid w_{i-1})
+        = \frac{C(w_{i-1},w_i)-d}{C(w_{i-1})}
+        + \lambda(w_{i-1})\cdot P(w_i)
+      \]
+    </div>
+  </div>
+    <!-- Right: frequency-of-frequency + r* -->
+    <div style="
+    margin-top: 16px;
+    background: rgba(0,0,0,0.05);
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+  ">
+    <ul style="font-size: 24px; line-height: 1.25; margin: 10px 0 0 0; padding-left: 26px;">
+      <li>\(\frac{C(w_{i-1},w_i)-d}{C(w_{i-1})}\): discounted bigram</li>
+      <li>\(\lambda(w_{i-1})\): interpolation weight</li>
+    </ul>
+  </div>
+  </div>
+</section>
+
+---
+
+<section class="ppt">
   <div class="ppt-title">Quick summary: N-gram language models</div>
   <div class="ppt-line"></div>
 
@@ -1246,3 +2029,4 @@
     </ul>
   </div>
 </section>
+
