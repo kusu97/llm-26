@@ -1,11 +1,10 @@
 <section class="title">
-  <div class="title-main">NLP and LLMs (CS40008.01)</div>
-  <div class="title-sub">Lecture 01 – Introduction to NLP</div>
-
+  <div class="title-main">Lecture 01 – Introduction to NLP & LLMs</div>
+  <div class="title-sub">CS40008.01</div>
   <div class="title-meta">
     <div>Baojian Zhou</div>
-    <div>NLP and LLMs (CS40008.01)</div>
-    <div>School of Data Science, Fudan University</div>
+    <div>School of Data Science</div>
+    <div>Fudan University</div>
     <div>03/05/2026</div>
   </div>
 </section>
@@ -17,12 +16,12 @@
   <div class="ppt-title">About me</div>
   <div class="ppt-line"></div>
 
-  <p><b>Email:</b> bjzhou@fudan.edu.cn</p>
-  <p><b>Course Website:</b> <a href="https://baojian.github.io/llm-26/" target="_blank" rel="noopener">https://baojian.github.io/llm-26/</a></p>
-  <p><b>Course Github:</b> <a href="https://github.com/baojian/llm-26" target="_blank" rel="noopener">https://github.com/baojian/llm-26</a></p>
-  <p><b>Location:</b> South-401, Computing Center</p>
-  <p><b>Office hour:</b> Wed. 10:00am–11:30am</p>
-  <p><b>Research interests:</b> Machine learning on graphs, optimization, text mining (e.g., word embeddings), diffusion models, and in-context learning on LLMs.</p>
+  <p><b>Email: </b>bjzhou@fudan.edu.cn</p>
+  <p><b>Course Website: </b> <a href="https://baojian.github.io/llm-26/" target="_blank" rel="noopener">https://baojian.github.io/llm-26/</a></p>
+  <p><b>Course Github: </b> <a href="https://github.com/baojian/llm-26" target="_blank" rel="noopener">https://github.com/baojian/llm-26</a></p>
+  <p><b>Location: </b>Francis and Rose Yuen Campus C611</p>
+  <p><b>Office hour: </b>Wed. 10:00am–11:30am</p>
+  <p><b>Research interests: </b>Machine learning on graphs, optimization, text mining (e.g., word embeddings), diffusion models, and in-context learning on LLMs.</p>
 </section>
 
 ---
@@ -146,7 +145,7 @@
 ---
 
 <section class="ppt">
-  <div class="ppt-title">Tasks – Sentiment Analysis</div>
+  <div class="ppt-title">Task 1 – Sentiment Analysis</div>
   <div class="ppt-line"></div>
 
   <div class="twocol" style="--left: 40%;">
@@ -154,13 +153,13 @@
     <div class="sa-left">
       <div class="sa-hint">Click an example:</div>
       <button class="sa-ex" data-text="Nice and compact to carry!">
-        ✅ Nice and compact to carry!
+        Nice and compact to carry!
       </button>
       <button class="sa-ex" data-text="Since the camera is small and light, I won't need to carry around those heavy, bulky professional cameras either!">
-        ✅ Since the camera is small and light, I won't need to carry around those heavy, bulky professional cameras either!
+        Since the camera is small and light, I won't need to carry around those heavy, bulky professional cameras either!
       </button>
       <button class="sa-ex" data-text="The camera feels flimsy, is plastic and very light in weight you have to be very delicate in the handling of this camera.">
-        ❌ The camera feels flimsy, is plastic and very light in weight you have to be very delicate in the handling of this camera.
+        The camera feels flimsy, is plastic and very light in weight you have to be very delicate in the handling of this camera.
       </button>
     </div>
     <!-- RIGHT: ollama demo -->
@@ -177,7 +176,7 @@
 ---
 
 <section class="ppt">
-  <div class="ppt-title">Task – Machine Translation (ZH → EN)</div>
+  <div class="ppt-title">Task 2 – Machine Translation (ZH → EN)</div>
   <div class="ppt-line"></div>
 
   <div class="twocol" style="--left: 42%;">
@@ -205,7 +204,7 @@
 ---
 
 <section class="ppt">
-  <div class="ppt-title">Task – Article Generation</div>
+  <div class="ppt-title">Task 3 – Article Generation</div>
   <div class="ppt-line"></div>
 
   <div class="twocol" style="--left: 43%;">
@@ -258,7 +257,7 @@
 ---
 
 <section class="ppt">
-  <div class="ppt-title">Task – Image Understanding</div>
+  <div class="ppt-title">Task 4 – Image Understanding</div>
   <div class="ppt-line"></div>
 
   <div class="twocol" style="--left: 40%;">
@@ -296,7 +295,7 @@
 ---
 
 <section class="ppt">
-  <div class="ppt-title">Task – Text → Image (Stable Diffusion)</div>
+  <div class="ppt-title">Task 5 – Text → Image (Stable Diffusion)</div>
   <div class="ppt-line"></div>
   <iframe
     src="./sd-demo.html"
@@ -307,7 +306,7 @@
 ---
 
 <section class="ppt">
-  <div class="ppt-title">Task – Text → Video</div>
+  <div class="ppt-title">Task 6 – Text → Video</div>
   <div class="ppt-line"></div>
 
   <div class="twocol" style="--left: 49%; gap: 22px;">
@@ -423,23 +422,24 @@
 <section class="ppt">
   <div class="ppt-title">Key Questions (This Course Will Answer)</div>
   <div class="ppt-line"></div>
+<div style="margin-top:5px; font-size:26px; opacity:.8;">
+    We will discuss following questions throughout the semester.
+  </div>
 
   <ul class="outline-bullets" style="margin-top:14px; font-size:34px; line-height:1.55;">
-    <li class="fragment"><b>How are LLMs built?</b> <span style="opacity:.85;">Pre-training = next-token prediction</span></li>
+    <li class="fragment"><b>How are LLMs built?</b> <span style="opacity:.85;">Pre-training</span></li>
     <li class="fragment"><b>What is the “thinking step”?</b> <span style="opacity:.85;">Post-training with SFT + RL</span></li>
-    <li class="fragment"><b>Why can one model do many tasks?</b> <span style="opacity:.85;">In-context learning + generalization</span></li>
-    <li class="fragment"><b>How can we make LLMs fast?</b> <span style="opacity:.85;">Efficient decoding + systems + compression</span></li>
-    <li class="fragment"><b>How to use LLMs smartly?</b> <span style="opacity:.85;">Tools, planning, and LLM agents</span></li>
-    <li class="fragment"><b>Are my questions and data safe?</b> <span style="opacity:.85;">Privacy + security + safety alignment</span></li>
+    <li class="fragment"><b>Why can one model do many tasks?</b> <span style="opacity:.85;">In-context learning</span></li>
+    <li class="fragment"><b>How can we make LLMs fast?</b> <span style="opacity:.85;">Efficient decoding + Systems</span></li>
+    <li class="fragment"><b>How to use LLMs smartly?</b> <span style="opacity:.85;">Tools + LLM agents</span></li>
+    <li class="fragment"><b>Are my questions and data safe?</b> <span style="opacity:.85;">Security + safety alignment</span></li>
     <li class="fragment"><b>Are there alternatives to AR LLMs?</b> <span style="opacity:.85;">Diffusion Language Models</span></li>
-    <li class="fragment"><b>How do we know if an LLM is good?</b> <span style="opacity:.85;">Benchmarks, robustness, hallucinations</span></li>
-    <li class="fragment"><b>How do we make LLM outputs reliable with knowledge/tools?</b> <span style="opacity:.85;">RAG, citations, verification</span></li>
-    <li class="fragment"><b>How do we adapt LLMs to a domain and beyond text?</b> <span style="opacity:.85;">Fine-tuning + Multimodality</span></li>
+    <li class="fragment"><b>How do we know if an LLM is good?</b> <span style="opacity:.85;">Benchmarks + Hallucinations</span></li>
+    <li class="fragment"><b>How do we make LLM outputs reliable with knowledge/tools?</b> <span style="opacity:.85;">RAG + Verification</span></li>
+    <li class="fragment"><b>How do we adapt LLMs to a domain and beyond text?</b> <span style="opacity:.85;">Multimodality</span></li>
   </ul>
 
-  <div class="fragment" style="margin-top:5px; font-size:26px; opacity:.8;">
-    We will focus on these questions throughout the semester.
-  </div>
+  
 </section>
 
 ---
@@ -458,7 +458,7 @@
         <li>Language models (N-grams)</li>
         <li>Word embeddings (word2vec)</li>
         <li>Neural networks for LMs</li>
-        <li>RNNs for sequence labeling</li>
+        <li>RNNs for sequence modeling</li>
         <li>Self-attention mechanism</li>
         <li>Transformer architecture</li>
       </ul>
@@ -470,16 +470,17 @@
       <ul style="margin:0;">
         <li>Pretraining & fine-tuning</li>
         <li>Evaluation & benchmarking</li>
-        <li>In-context learning</li>
-        <li>Reasoning & agents</li>
+        <li>Prompting & In-context learning</li>
+        <li>Reasoning & Agents</li>
         <li>Diffusion language models</li>
       </ul>
       <div style="height:14px;"></div>
-      <div style="font-weight:900; color:#1f4e9a;">Applications</div>
+      <div style="font-weight:900; color:#1f4e9a;">Advances</div>
       <div style="height:5px;"></div>
       <ul style="margin:0;">
-        <li>Machine translation</li>
-        <li>Syntactic analysis</li>
+        <li>Alignment & Safety</li>
+        <li>Efficiency & Systems</li>
+        <li>Agents & Frontiers</li>
       </ul>
     </div>
   </div>
@@ -640,13 +641,14 @@
         Strategy: <b>read → implement → experiment → explain</b>
       </div>
     </div>
-    <!-- RIGHT: diagram -->
-    <div class="skill-map">
-      <div class="skill-center">NLP & LLMs</div>
-      <div class="skill-node n1">Linear algebra</div>
-      <div class="skill-node n2">Statistics / ML</div>
-      <div class="skill-node n3">Python (NumPy / PyTorch)</div>
-      <div class="skill-node n4">Communication</div>
+    <div style="font-size:40px; line-height:1.55; margin-top:8px;">
+      <div style="font-weight:900; color:#1f4e9a;">It is all about coding</div>
+      <div style="height:5px;"></div>
+      <ul style="margin:0;">
+        <li><b>Practice</li>
+        <li><b>Practice</li>
+        <li><b>Practice</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -676,13 +678,13 @@
     <!-- LEFT -->
     <div class="text">
       <ul class="outline-bullets" style="margin-top:10px;">
-        <li class="fragment"><b>Ambiguity is everywhere</b>: the same words/structure can mean different things.</li>
+        <li><b>Ambiguity is everywhere</b>: the same words/structure can mean different things.</li>
         <li class="fragment"><b>Syntax ambiguity</b> (who did what to whom?)</li>
         <li class="fragment"><b>Semantic / pragmatic ambiguity</b> (what is implied?)</li>
         <li class="fragment"><b>Cross-lingual ambiguity</b> exists in both English and Chinese.</li>
       </ul>
-      <div class="fragment" style="margin-top:18px; font-size:26px; opacity:.85;">
-        Pre-LLM pipelines relied on handcrafted rules/features → brittle under ambiguity.
+      <div style="margin-top:18px; font-size:26px; opacity:.85;">
+        Pre-LLM pipelines relied on handcrafted rules/features.
       </div>
     </div>
     <!-- RIGHT -->
@@ -696,7 +698,7 @@
         font-size:26px;
         line-height:1.35;
       ">
-        <div style="font-weight:900; color:#1f4e9a; margin-bottom:10px;">English examples</div>
+        <div class="fragment" style="font-weight:900; color:#1f4e9a; margin-bottom:10px;">English examples</div>
         <div class="fragment" style="margin-bottom:10px;">
           “A man saw a boy <b>with a telescope</b>.”<br/>
           <span style="opacity:.8;">Who had the telescope?</span>
@@ -733,8 +735,6 @@
         <li style="margin:10px 0; class="fragment"><b>Segmentation</b><br/> what is a “word”? (esp. for Chinese / noisy text)</li>
         <li style="margin:10px 0; class="fragment"><b>Idioms & figurative language</b><br/> meaning ≠ literal words.</li>
         <li style="margin:10px 0; class="fragment"><b>Neologisms</b><br/> new words appear faster than rules/dictionaries.</li>
-        <li style="margin:10px 0; class="fragment"><b>Entity names</b><br/> titles vs common words (“Let It Be”, “A Bug’s Life”).</li>
-        <li style="margin:10px 0; class="fragment"><b>World knowledge</b><br/> understanding requires facts beyond the sentence.</li>
         <li style="margin:10px 0; class="fragment"><b>Reasoning pitfalls</b><br/> valid form ≠ valid meaning (adversarial examples).</li>
       </ul>
     </div>
@@ -749,18 +749,18 @@
         font-size:25px;
         line-height:1.35;
       ">
-        <div style="font-weight:900; color:#1f4e9a; margin-bottom:10px;">Non-standard text</div>
+        <div class="fragment" style="font-weight:900; color:#1f4e9a; margin-bottom:10px;">Non-standard text</div>
         <div class="fragment" style="opacity:.95; margin-bottom:12px;">
           Great job @justinbieber! Were SOO PROUD of what youve accomplished!<br/>
           U taught us 2 #neversaynever ...
         </div>
-        <div style="font-weight:900; color:#1f4e9a; margin:10px 0 8px;">Idioms / neologisms</div>
+        <div class="fragment" style="font-weight:900; color:#1f4e9a; margin:10px 0 8px;">Idioms / neologisms</div>
         <div class="fragment" style="opacity:.95; margin-bottom:12px;">
            · dark horse · lose face · break a leg <br/>
            · bite the bullet · unfriend <br/>
            · Retweet · bromance · 鸡娃
         </div>
-        <div style="font-weight:900; color:#1f4e9a; margin:10px 0 8px;">Reasoning trap</div>
+        <div class="fragment" style="font-weight:900; color:#1f4e9a; margin:10px 0 8px;">Reasoning trap</div>
         <div class="fragment" style="opacity:.95;">
           A penny is better than nothing.<br/>
           Nothing is better than world peace.<br/>
@@ -839,7 +839,7 @@
           </text>
         </g>
         <!-- Papers from A/B -->
-        <g class="fragment" data-fragment-index="3">
+        <g class="fragment" data-fragment-index="2">
           <!-- left paper -->
           <rect x="175" y="258" width="60" height="40" rx="6" fill="#fff" stroke="rgba(0,0,0,0.25)" stroke-width="3"></rect>
           <line x1="185" y1="272" x2="225" y2="272" stroke="rgba(0,0,0,0.25)" stroke-width="2"></line>
@@ -859,7 +859,7 @@
           </text>
         </g>
         <!-- Arrows to C -->
-        <g class="fragment" data-fragment-index="4" stroke="#000" stroke-width="5" fill="none" opacity="0.85">
+        <g class="fragment" data-fragment-index="2" stroke="#000" stroke-width="5" fill="none" opacity="0.85">
           <path d="M 205 300 C 240 320, 290 340, 325 350"></path>
           <path d="M 515 300 C 480 320, 430 340, 395 350"></path>
           <polygon points="332,351 316,345 322,360" fill="#000"></polygon>
@@ -867,7 +867,7 @@
         </g>
       </svg>
       <!-- Hard part -->
-      <div class="fragment" data-fragment-index="5"
+      <div class="fragment" data-fragment-index="3"
            style="margin-top:10px; font-size:28px; line-height:1.25;">
         <b>Hard part:</b> the <b>machine A</b> must generate answers that are
         <span style="color:#d00; font-weight:900;">indistinguishable</span>
@@ -878,35 +878,68 @@
     <div class="fig">
       <div style="font-size:30px; font-weight:900; margin-top:8px;">Example of Q&amp;A:</div>
       <ul class="outline-bullets" style="margin-top:10px; font-size:26px; line-height:1.35;">
-        <li class="fragment" data-fragment-index="1">
+        <li class="fragment" data-fragment-index="4">
           <b>C:</b> Please write me a sonnet on the subject of the Forth Bridge.
         </li>
-        <li class="fragment" data-fragment-index="2" style="color:#0a7a0a; font-weight:900;">
+        <li class="fragment" data-fragment-index="4" style="color:#0a7a0a; font-weight:900;">
           <b>A/B:</b> Count me out on this one. I never could write poetry.
         </li>
-        <li class="fragment" data-fragment-index="3">
+        <li class="fragment" data-fragment-index="4">
           <b>C:</b> Add 34,957 to 70,764.
         </li>
         <li class="fragment" data-fragment-index="4" style="color:#0a7a0a; font-weight:900;">
           <b>A/B:</b> (Pause about 30 seconds and then give as answer) 105621.
         </li>
-        <li class="fragment" data-fragment-index="5">
+        <li class="fragment" data-fragment-index="4">
           <b>C:</b> Do you play chess?
         </li>
-        <li class="fragment" data-fragment-index="6" style="color:#0a7a0a; font-weight:900;">
+        <li class="fragment" data-fragment-index="4" style="color:#0a7a0a; font-weight:900;">
           <b>A/B:</b> Yes.
         </li>
       </ul>
-      <div style="height:10px;"></div>
+      <div style="height:60px;"></div>
       <ul style="margin:0; padding-left:1.2em; font-size:22px; line-height:1.35;">
-        <li class="fragment" data-fragment-index="7">
+        <li class="fragment" data-fragment-index="5">
           <a href="http://baojian.github.io/llm-26/papers/Does_GPT-4_pass_the_Turing_test-2023.pdf" target="_blank" rel="noopener">Does GPT-4 pass the Turing test?</a>
         </li>
-        <li class="fragment" data-fragment-index="7">
+        <li class="fragment" data-fragment-index="5">
           <a href="http://baojian.github.io/llm-26/papers/Large_Language_Models_Pass_the_Turing_Test-2025.pdf" target="_blank" rel="noopener">Large Language Models Pass the Turing Test</a>
         </li>
       </ul>
     </div>
+  </div>
+</section>
+
+---
+
+<section class="ppt">
+  <div class="ppt-title">NLP history (1970–2017)</div>
+  <div class="ppt-line" style="margin-bottom: 6px;"></div>
+
+  <!-- use slide-relative height instead of vh -->
+  <div style="
+    width: 100%;
+    height: calc(100% - 110px);   /* adjust 100–130px if needed */
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 0;
+  ">
+    <img
+      data-src="media/ppt/media/nlp-history_1970_2017.png"
+      alt="NLP history (1970–2017)"
+      style="
+        height: 100%;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        object-position: top center;
+        border-radius: 2px;
+        border: 1px solid rgba(0,0,0,0.12);
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        background: white;
+      "
+    />
   </div>
 </section>
 
@@ -957,7 +990,8 @@
       <div style="font-size:18px; opacity:.75; text-align:left; margin-right:2px;">
         Paper Link:
         <a href="https://baojian.github.io/llm-26/papers/Attention_Is_All_You_Need-2017.pdf"
-           target="_blank" rel="noopener">Attention Is All You Need (2017)</a>
+           target="_blank" rel="noopener">Attention Is All You Need (2017)</a>, <a href="https://scholar.google.com/citations?view_op=view_citation&hl=en&user=oR9sCGYAAAAJ&citation_for_view=oR9sCGYAAAAJ:zYLM7Y9cAGgC"
+           target="_blank" rel="noopener">Citation</a>
       </div>
     </div>
     <!-- RIGHT COLUMN: single large image + paper link under it -->
@@ -1033,17 +1067,13 @@
       <div style="font-weight:900; color:#1f4e9a;">Text data = written text</div>
       <div style="height:8px;"></div>
       <ul style="margin:0; padding-left:1.1em;">
-        <li>LLMs learn from <b>massive corpora</b> collected from many places</li>
+        <li>LLMs learn from <b>massive corpora</b></li>
         <li>Different sources have different <b>style</b>, <b>quality</b>, and <b>bias</b></li>
         <li>Understanding data sources helps us understand a model’s <b>strengths</b> and <b>limitations</b></li>
       </ul>
       <div style="height:16px;"></div>
-      <div class="fragment" style="font-weight:900; color:#d00;">
-        Task: find the pre-training datasets (or data sources) of:
-      </div>
-      <div class="fragment" style="height:6px;"></div>
-      <div class="fragment" style="font-weight:900;">
-        DeepSeek-V3, Qwen3, Llama 3, Gemini 2.5
+      <div class="fragment"  data-fragment-index="1" style="font-weight:900; color:#d00;">
+        Task: find the pre-training datasets (or data sources) of DeepSeek-V3, Qwen3, Llama 3, Gemini 2.5
       </div>
     </div>
     <!-- RIGHT: sources + topics -->
@@ -1071,7 +1101,7 @@
       </div>
     </div>
   </div>
-  <div class="fragment" style="margin-top:14px; font-size:22px; opacity:.75;">
+  <div class="fragment"  data-fragment-index="1" style="margin-top:14px; font-size:22px; opacity:.75;">
     Hint: check each model’s <b>technical report</b>, <b>system card</b>, and <b>training data statement</b>.
   </div>
 </section>
@@ -1137,17 +1167,17 @@
     <!-- RIGHT: notebook link / embed -->
     <div style="margin-top:10px;">
       <div style="font-size:28px; font-weight:900; color:#1f4e9a; margin-bottom:8px;">
-      <a href="https://baojian.github.io/llm-26/lecture-01/lecture-01-exercise-NLP-LLMs-introduction.html#section-0" target="_blank" rel="noopener" style="color:#1f4e9a; text-decoration:none;">Exercise Notebook (Section 0)</a>
+      <a href="https://baojian.github.io/llm-26/lecture-01-tokenization/lecture-01-exercise-tokenization.html#section-0" target="_blank" rel="noopener" style="color:#1f4e9a; text-decoration:none;">Exercise Notebook (Section 0)</a>
       </div>
-      <div style="height:2px;"></div>
+      <div style="height:2px;"></div> 
       <iframe
-        src="https://baojian.github.io/llm-26/lecture-01/lecture-01-exercise-NLP-LLMs-introduction.html"
+        src="https://baojian.github.io/llm-26/lecture-01-tokenization/lecture-01-exercise-tokenization.html"
         style="width:100%; height:520px; border:1px solid #d9d9d9; border-radius:12px;">
       </iframe>
       <div style="height:5px;"></div>
       <div style="font-size:18px; opacity:0.75;">
         If the embed is blocked, open in a new tab:
-        <a href="https://baojian.github.io/llm-26/lecture-01/lecture-01-exercise-NLP-LLMs-introduction.html"
+        <a href="https://baojian.github.io/llm-26/lecture-01-tokenization/lecture-01-exercise-tokenization.html"
            target="_blank" rel="noopener">link</a>
       </div>
     </div>
@@ -1225,7 +1255,7 @@ print(result)</code></pre>
             border:2px solid rgba(0,0,0,0.12);
             border-radius:14px; padding:10px 12px; background:#f6f7f9;">
             <span style="font-weight:900; color:#1f4e9a;">Tip:</span>Try the code in <b>Section 2</b> of the exercise notebook:
-            <a href="https://baojian.github.io/llm-26/lecture-01/lecture-01-exercise-NLP-LLMs-introduction.html#20" target="_blank" rel="noopener">lecture-01-exercise-NLP-LLMs-introduction.html</a>
+            <a href="https://baojian.github.io/llm-26/lecture-01-tokenization/lecture-01-exercise-tokenization.html#20" target="_blank" rel="noopener">lecture-01-exercise-tokenization.html</a>
     </div>
 </section>
 
@@ -1297,10 +1327,7 @@ Process finished with exit code 0</code></pre>
               border-radius:14px; padding:10px 12px; background:#f6f7f9;">
     <span style="font-weight:900; color:#1f4e9a;">Tip:</span>
     Try the code in <b>Section 2</b> of the exercise notebook:
-    <a href="https://baojian.github.io/llm-26/lecture-01/lecture-01-exercise-NLP-LLMs-introduction.html#section-1"
-       target="_blank" rel="noopener">
-      lecture-01-exercise-NLP-LLMs-introduction.html
-    </a>
+    <a href="https://baojian.github.io/llm-26/lecture-01-tokenization/lecture-01-exercise-tokenization.html#20" target="_blank" rel="noopener">lecture-01-exercise-tokenization.html</a>
   </div>
 </section>
 
@@ -1434,10 +1461,7 @@ print(result)</code></pre>
               border-radius:14px; padding:10px 12px; background:#f6f7f9;">
     <span style="font-weight:900; color:#1f4e9a;">Tip:</span>
     Try the code in <b>Section 2</b> of the exercise notebook:
-    <a href="https://baojian.github.io/llm-26/lecture-01/lecture-01-exercise-NLP-LLMs-introduction.html#section-1"
-       target="_blank" rel="noopener">
-      lecture-01-exercise-NLP-LLMs-introduction.html
-    </a>
+    <a href="https://baojian.github.io/llm-26/lecture-01-tokenization/lecture-01-exercise-tokenization.html#20" target="_blank" rel="noopener">lecture-01-exercise-tokenization.html</a>
   </div>
 </section>
 
@@ -1508,13 +1532,13 @@ print(tokens)</code></pre>
     <!-- TOP-LEFT: Computational biology -->
     <div class="text">
       <div style="border:2px solid rgba(0,0,0,0.08); border-radius:14px; padding:14px 14px; background:rgba(255,255,255,0.65);">
-        <div style="font-size:28px; font-weight:900; color:#1f4e9a; margin-bottom:6px;">
+        <div class="fragment" data-fragment-index="1" style="font-size:28px; font-weight:900; color:#1f4e9a; margin-bottom:6px;">
           Computational Biology
         </div>
-        <div style="font-size:22px; opacity:.8; margin-bottom:10px;">
+        <div class="fragment" data-fragment-index="1" style="font-size:22px; opacity:.8; margin-bottom:10px;">
           Align two sequences of nucleotides
         </div>
-        <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono','Courier New', monospace;
+        <div class="fragment" data-fragment-index="1" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono','Courier New', monospace;
                     font-size:22px; font-weight:800; color:#1f4e9a; letter-spacing:.4px; line-height:1.25;">
           AGGCTATCACCTGACCTCCAGGCCGATGCCC<br/>
           TAGCTATCACGACCGCGGTCGATTTGCCCGAC
@@ -1536,27 +1560,27 @@ print(tokens)</code></pre>
     <!-- TOP-RIGHT: Spell correction -->
     <div class="fig">
       <div style="border:2px solid rgba(0,0,0,0.08); border-radius:14px; padding:14px 14px; background:rgba(255,255,255,0.65);">
-        <div style="font-size:28px; font-weight:900; color:#1f4e9a; margin-bottom:6px;">
+        <div class="fragment" data-fragment-index="2" style="font-size:28px; font-weight:900; color:#1f4e9a; margin-bottom:6px;">
           Spell Correction
         </div>
-        <div style="font-size:22px; opacity:.8; margin-bottom:10px;">
+        <div class="fragment" data-fragment-index="2" style="font-size:22px; opacity:.8; margin-bottom:10px;">
           Find the closest candidate by MED
         </div>
-        <div style="font-size:26px; line-height:1.35;">
+        <div class="fragment" data-fragment-index="2" style="font-size:26px; line-height:1.35;">
           Input: <span class="fudanblue" style="font-weight:900;">graffe</span>
         </div>
         <div style="height:10px;"></div>
-        <div style="font-size:22px; line-height:1.55;">
+        <div class="fragment" data-fragment-index="2" style="font-size:22px; line-height:1.55;">
           Candidates:
           <div style="height:6px;"></div>
-          <div style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,'Liberation Mono','Courier New', monospace;">
+          <div class="fragment" data-fragment-index="2" style="font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,'Liberation Mono','Courier New', monospace;">
             giraffe, graph, giraff, grief
           </div>
         </div>
         <div class="fragment" data-fragment-index="2" style="margin-top:12px; font-size:26px; font-weight:900;">
           Best match: <span style="color:#1f4e9a;">giraffe</span>
         </div>
-        <div style="margin-top:10px; font-size:18px; opacity:.75;">
+        <div class="fragment" data-fragment-index="2" style="margin-top:10px; font-size:18px; opacity:.75;">
           MED provides a principled way to compare strings.
         </div>
       </div>
@@ -1568,13 +1592,13 @@ print(tokens)</code></pre>
 
   <!-- BOTTOM ROW: Machine Translation (full width) -->
   <div style="border:2px solid rgba(0,0,0,0.08); border-radius:14px; padding:14px 16px; background:rgba(255,255,255,0.65);">
-    <div style="font-size:26px; font-weight:900; color:#1f4e9a; margin-bottom:8px;">
+    <div  class="fragment" data-fragment-index="3" style="font-size:26px; font-weight:900; color:#1f4e9a; margin-bottom:8px;">
       Machine Translation (Chinese → English)
     </div>
     <div class="twocol" style="--left:44%;">
       <!-- MT left -->
       <div class="text">
-        <div style="font-size:22px; line-height:1.35;">
+        <div  class="fragment" data-fragment-index="3" style="font-size:22px; line-height:1.35;">
           <div style="font-weight:900; color:#1f4e9a;">Chinese</div>
           <div style="height:4px;"></div>
           <div style="font-weight:800;">这个机场的安全工作由以色列方面负责</div>
@@ -1586,7 +1610,7 @@ print(tokens)</code></pre>
       </div>
       <!-- MT right -->
       <div class="fig">
-        <div style="font-size:20px; line-height:1.45;">
+        <div  class="fragment" data-fragment-index="3" style="font-size:20px; line-height:1.45;">
           <div style="font-weight:900; color:#1f4e9a;">Candidates</div>
           <ol style="margin:6px 0 0 0; padding-left:1.2em;">
             <li>Israeli officials responsibility of airport safety</li>
@@ -1729,129 +1753,112 @@ print(tokens)</code></pre>
   <div class="ppt-title">How to find MED?</div>
   <div class="ppt-line"></div>
 
-  <!-- top content stays for your other part of the slide -->
-  <div style="height:300px;"></div>
-
-  <!-- bottom strip: keep this message -->
+  <!-- Auto-fit container -->
   <div style="
-    position:absolute; left:40px; right:40px; bottom:40px;
-    border:2px solid rgba(0,0,0,0.10);
-    border-radius:16px;
-    padding:18px 22px;
-    background:rgba(255,255,255,0.92);
-    box-shadow:0 10px 22px rgba(0,0,0,0.10);
+    width: 100%;
+    height: 78vh;              /* adjust: 70–78vh depending on your theme */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 8px;
   ">
-    <div style="font-size:30px; font-weight:900; margin-bottom:10px;">
-      View MED as a <span class="fudanblue">shortest-path / search</span> problem
-    </div>
-    <div style="display:flex; gap:26px; align-items:flex-start;">
-      <!-- left: search framing -->
-      <div style="flex:6; font-size:26px; line-height:1.35;">
-        <ul style="margin:0; padding-left:1.1em;">
-          <li><b>State:</b> current string</li>
-          <li><b>Actions:</b> insert / delete / substitute</li>
-          <li><b>Goal:</b> transform <span class="fudanblue">X → Y</span></li>
-          <li><b>Cost:</b> number of (weighted) edits</li>
-        </ul>
-      </div>
-      <!-- right: key punchline -->
-      <div style="flex:5; font-size:26px; line-height:1.35;">
-        <div style="font-weight:900; color:#d00; margin-bottom:6px;">
-          Naive search is infeasible
-        </div>
-        <ul style="margin:0; padding-left:1.1em;">
-          <li>Number of edit sequences grows <b>exponentially</b></li>
-          <li>We need <b>dynamic programming</b> (next slides)</li>
-        </ul>
-      </div>
-    </div>
+    <img
+      data-src="media/ppt/media/how-to-find-med.png"
+      alt="how-to-find-med"
+      style="
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 14px;
+        border: 1px solid rgba(0,0,0,0.12);
+        box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        background: white;
+      "
+    />
   </div>
 </section>
 
 ---
 
 <section class="ppt">
-  <div class="ppt-title">Search View: Why Not Brute Force?</div>
+  <div class="ppt-title">MED and Dynamic Programming</div>
   <div class="ppt-line"></div>
 
+  <div class="twocol" style="--left: 35%;">
+    <!-- LEFT (40%): definition -->
+    <div class="text" style="font-size:30px; line-height:1.35; margin-top:8px;">
+      <ul style="margin:0; padding-left:1.1em;">
+        <li><b>For two strings</b>, define</li>
+      </ul>
+      <div style="height:8px;"></div>
+      <div style="font-size:28px;">
+        $$
+        X = [x_1,x_2,\ldots,x_n],
+        $$
+        $$
+        Y = [y_1,y_2,\ldots,y_m]
+        $$
+      </div>
+      <div style="height:10px;"></div>
+      <ul style="margin:0; padding-left:1.1em;">
+        <li>
+          We define <b>$D[i,j]$</b> as the MED between
+          $X[1\ldots i]$ and $Y[1\ldots j]$
+        </li>
+        <li style="margin-top:6px;">
+          $i$: first $i$ characters of $X$;<div style="height:1px;"></div>
+          $j$: first $j$ characters of $Y$
+        </li>
+      </ul>
+      <div style="height:40px;"></div>
+      <div style="font-size:32px; font-weight:900; color:#d00;">
+        Edit distance$$(X,Y)=D[n,m]$$
+      </div>
+    </div>
+    <!-- RIGHT (60%): DP -->
+    <div class="fig fragment" data-fragment-index="1" style="font-size:28px; line-height:1.35; margin-top:8px;">
+      <div style="font-weight:900; color:#1f4e9a; font-size:34px; margin-bottom:8px;">
+        Dynamic programming for MED
+      </div>
+      <div style="height:5px;"></div>
+      <div style="font-weight:900; margin-bottom:6px;">Initialization</div>
+      <div style="font-size:24px;">
+        $$
+        D[0,j]=j\quad (j=0,1,\ldots,m),\quad D[i,0]=i\quad (i=0,1,\ldots,n)
+        $$
+      </div>
+      <div style="height:6px;"></div>
+      <div style="font-weight:900; margin-bottom:6px;">Recurrence</div>
+      <div style="font-size:26px;">
+        $$
+          D[i,j] \;=\;
+          \min\begin{cases}
+          D[i-1,j] + \mathrm{Del}(x_i)\\
+          D[i,j-1] + \mathrm{Ins}(y_j)\\
+          D[i-1,j-1] + \mathrm{Sub}(x_i,y_j)
+          \end{cases}
+        $$
+      </div>
+      <div style="height:6px;"></div>
+      <div style="font-weight:900; margin-bottom:6px;">Levenshtein costs</div>
+      <div style="font-size:24px;">
+        $$
+        \mathrm{Del}(x_i)=1,\quad \mathrm{Ins}(y_j)=1, \quad \mathrm{Sub}(x_i,y_j)=
+        \begin{cases}
+          0,& x_i=y_j,\\
+          2,& x_i\neq y_j.
+        \end{cases}
+        $$
+      </div>
+      <div style="height:5px;"></div>
+      <div style="font-size:32px; font-weight:900; color:#d00;">
+        Return <b>$D[n,m]$</b> as MED.
+      </div>
+    </div>
 
-  <ul class="outline-bullets">
-    <li>State = current string</li>
-    <li>Actions = insert / delete / substitute</li>
-    <li>Goal = reach the target string</li>
-    <li>Path cost = total edit cost</li>
-  </ul>
-
-
-  <div style="height:12px;"></div>
-  <div style="font-size:30px; font-weight:800;">
-    Brute force enumerates <span class="fudanblue">too many</span> edit sequences.  
-    We need <span class="fudanblue">dynamic programming</span>.
   </div>
-</section>
-
----
-
-<section class="ppt med-slide">
-  <div class="ppt-title">Dynamic Programming Recurrence</div>
-  <div class="ppt-line"></div>
-  <ul class="outline-bullets">
-    <li>Let <b>D[i,j]</b> be the minimum cost to convert <b>x₁…xᵢ</b> into <b>y₁…yⱼ</b></li>
-    <li>Each cell comes from <b>3 cases</b>: delete / insert / substitute</li>
-  </ul>
-  <div class="med-eq" style="position:relative; right:auto; bottom:auto; margin-top:10px; width:900px;">
-  $$
-  D[i,j] = \min\Big\{
-    D[i-1,j] + \mathrm{Del}(x_i),\;
-    D[i,j-1] + \mathrm{Ins}(y_j),\;
-    D[i-1,j-1] + \mathrm{Sub}(x_i,y_j)
-  \Big\}
-  $$
-  </div>
-</section>
-
----
-
-<section class="ppt med-slide med-w55 med-bt-slide">
-  <div class="ppt-title">Backtracking: Recover the Alignment</div>
-  <div class="ppt-line"></div>
-
-  <!-- NEW: short motivation text (your content) -->
-  <div style="
-    margin-top:10px;
-    font-size:26px;
-    line-height:1.35;
-    border:2px solid rgba(0,0,0,0.10);
-    border-radius:14px;
-    padding:12px 16px;
-    background:rgba(255,255,255,0.92);
-  ">
-    <ul style="margin:0; padding-left:1.1em;">
-      <li><b>Edit distance alone is not sufficient</b> — we also want the <b>alignment</b>.</li>
-      <li>We align characters by keeping a <b>backtrace</b> (argmin pointer) for each cell.</li>
-      <li>Every time we fill a cell, we remember <b>where we came from</b>.</li>
-      <li>When we reach the end, we trace back from <b>bottom-right</b> to read off the alignment.</li>
-    </ul>
-  </div>
-
-  <div style="height:10px;"></div>
-
-  <!-- keep your existing bullets (optional: can remove if redundant) -->
-  <ul class="outline-bullets" style="margin-top:6px;">
-    <li>MED value is in the <b>bottom-right</b> cell</li>
-    <li>To get the <b>alignment</b>, follow the argmin pointers backward</li>
-    <li>Each step corresponds to
-      <span class="legend-chip del">Del</span>,
-      <span class="legend-chip ins">Ins</span>,
-      <span class="legend-chip sub">Sub</span>, or
-      <span class="legend-chip keep">Match</span>
-    </li>
-  </ul>
-
-  <div style="height:10px;"></div>
-
-  <!-- your working backtracking HTML goes here -->
-  <div id="med-backtrack"></div>
 </section>
 
 ---
@@ -1935,7 +1942,7 @@ $$
   <div class="bt-frags" style="display:none;"></div>
 
 <!-- lower-right theory box (appears at the end) -->
-<div
+<div class="fragment" data-fragment-index="999" 
      style="
        position:absolute; right:26px; bottom:22px;
        width: 520px;
@@ -1957,87 +1964,6 @@ $$
 
 </div>
 
-</section>
-
----
-
-<section class="ppt">
-  <div class="ppt-title">MED and Dynamic Programming</div>
-  <div class="ppt-line"></div>
-
-  <div class="twocol" style="--left: 35%;">
-    <!-- LEFT (40%): definition -->
-    <div class="text" style="font-size:30px; line-height:1.35; margin-top:8px;">
-      <ul style="margin:0; padding-left:1.1em;">
-        <li><b>For two strings</b>, define</li>
-      </ul>
-      <div style="height:8px;"></div>
-      <div style="font-size:28px;">
-        $$
-        X = [x_1,x_2,\ldots,x_n],
-        $$
-        $$
-        Y = [y_1,y_2,\ldots,y_m]
-        $$
-      </div>
-      <div style="height:10px;"></div>
-      <ul style="margin:0; padding-left:1.1em;">
-        <li>
-          We define <b>$D[i,j]$</b> as the MED between
-          $X[1\ldots i]$ and $Y[1\ldots j]$
-        </li>
-        <li style="margin-top:6px;">
-          $i$: first $i$ characters of $X$;<div style="height:1px;"></div>
-          $j$: first $j$ characters of $Y$
-        </li>
-      </ul>
-      <div style="height:40px;"></div>
-      <div style="font-size:32px; font-weight:900; color:#d00;">
-        Edit distance$$(X,Y)=D[n,m]$$
-      </div>
-    </div>
-    <!-- RIGHT (60%): DP -->
-    <div class="fig fragment" data-fragment-index="1" style="font-size:28px; line-height:1.35; margin-top:8px;">
-      <div style="font-weight:900; color:#1f4e9a; font-size:34px; margin-bottom:8px;">
-        Dynamic programming for MED
-      </div>
-      <div style="height:5px;"></div>
-      <div style="font-weight:900; margin-bottom:6px;">Initialization</div>
-      <div style="font-size:24px;">
-        $$
-        D[0,j]=j\quad (j=0,1,\ldots,m),\quad D[i,0]=i\quad (i=0,1,\ldots,n)
-        $$
-      </div>
-      <div style="height:6px;"></div>
-      <div style="font-weight:900; margin-bottom:6px;">Recurrence</div>
-      <div style="font-size:26px;">
-        $$
-          D[i,j] \;=\;
-          \min\begin{cases}
-          D[i-1,j] + \mathrm{Del}(x_i)\\
-          D[i,j-1] + \mathrm{Ins}(y_j)\\
-          D[i-1,j-1] + \mathrm{Sub}(x_i,y_j)
-          \end{cases}
-        $$
-      </div>
-      <div style="height:6px;"></div>
-      <div style="font-weight:900; margin-bottom:6px;">Levenshtein costs</div>
-      <div style="font-size:24px;">
-        $$
-        \mathrm{Del}(x_i)=1,\quad \mathrm{Ins}(y_j)=1, \quad \mathrm{Sub}(x_i,y_j)=
-        \begin{cases}
-          0,& x_i=y_j,\\
-          2,& x_i\neq y_j.
-        \end{cases}
-        $$
-      </div>
-      <div style="height:5px;"></div>
-      <div style="font-size:32px; font-weight:900; color:#d00;">
-        Return <b>$D[n,m]$</b> as MED.
-      </div>
-    </div>
-
-  </div>
 </section>
 
 ---
@@ -2517,10 +2443,6 @@ $$
       </ul>
     </div>
   </div>
-
-  <div class="fragment" style="margin-top:14px; font-size:22px; opacity:.78;">
-    Takeaway: tokenization is a <b>design choice</b> that shapes multilingual quality, robustness, and cost.
-  </div>
 </section>
 
 ---
@@ -2552,8 +2474,8 @@ $$
       <ul class="outline-bullets big" style="font-size:28px; line-height:1.45; margin-top:8px;">
         <li style="color:#d00;"><b>Exercise: do our first exercise</b></li>
         <div style="height:6px;"></div>
-        <a href="https://baojian.github.io/llm-26/lecture-01/lecture-01-exercise-NLP-LLMs-introduction.html" target="_blank" rel="noopener">
-              https://baojian.github.io/llm-26/lecture-01/lecture-01-exercise-NLP-LLMs-introduction.html
+        <a href="https://baojian.github.io/llm-26/lecture-01-tokenization/lecture-01-exercise-tokenization.html" target="_blank" rel="noopener">
+              https://baojian.github.io/llm-26/lecture-01-tokenization/lecture-01-exercise-tokenization.html
             </a>
       </ul>
     </div>
@@ -2572,7 +2494,7 @@ $$
           </li>
           <div style="height:8px;"></div>
           <li>
-            Histroy of LLMs (by Gregory Gundersen):<div style="height:2px;"></div>
+            History of LLMs (by Gregory Gundersen):<div style="height:2px;"></div>
             <a href="https://gregorygundersen.com/blog/2025/10/01/large-language-models/" target="_blank" rel="noopener">
             blog: large-language-models</a>
           </li>

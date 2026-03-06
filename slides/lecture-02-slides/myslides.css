@@ -1,6 +1,11 @@
 :root{
   --fudan-blue:#1f4e9a;
   --muted:#cfcfcf;
+  --accent:#1f4fa3;      /* title + rule */
+  --bar:#5e7fb8;         /* blue bars */
+  --bar2:#7ea0d6;        /* lighter blue */
+  --other:#22b14c;       /* green "other" */
+  --text:#111;
 }
 
 .fudanblue { color: var(--fudan-blue); }
@@ -25,18 +30,18 @@
   color: var(--fudan-blue);
   font-weight: 800;
   font-size: 64px;
-  line-height: 1.15;
-  margin: 80px 20px 24px;
+  line-height: 1.2;
+  margin: 150px 20px 40px;
 }
 .title-sub{
   color: var(--fudan-blue);
   font-weight: 800;
-  font-size: 50px;
+  font-size: 45px;
   line-height: 1.08;
   margin: 0;
 }
 .title-meta{
-  margin-top: 210px;
+  margin-top: 150px;
   color: var(--fudan-blue);
   font-weight: 700;
   font-size: 34px;
@@ -44,7 +49,25 @@
 }
 
 /* PPT SLIDE HEADER */
-.ppt{ padding: 6px 6px; }
+.ppt{ 
+  padding: 6px 6px 6px 10px; 
+  margin-left: 0;
+}
+.reveal .slides section.ppt {
+  padding-left: 10px;
+  padding-right: 40px;
+}
+
+/* Reduce left padding on nested lists in PPT slides */
+.ppt ul {
+  padding-left: 0.05em;
+}
+.ppt ul ul {
+  padding-left: 0.05em;
+}
+.ppt ul ul ul {
+  padding-left: 0.05em;
+}
 .ppt-title{
   font-size: 64px;
   font-weight: 800;
@@ -93,4 +116,68 @@
 .outline-bullets.med li,
 .outline-bullets.small li{
   margin: 10px 0;
+}
+
+/* Text color utilities */
+.text-green { color: #28a745; }
+.text-red { color: #dc3545; }
+
+/* Spaced list items */
+.spaced-list li {
+  margin-bottom: 12px;
+}
+
+/* slide title look */
+.smoothing-slide h2{
+  margin: 0 0 10px 0;
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+.smoothing-rule{
+  height: 6px;
+  background: var(--accent);
+  width: 100%;
+  margin: 6px 0 18px 0;
+}
+
+.smoothing-slide ul{
+  margin: 0 0 14px 0;
+  padding-left: 28px;
+  color: var(--text);
+  font-size: 34px;
+  line-height: 1.25;
+  font-weight: 650;
+}
+
+.smoothing-row{
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin: 10px 0 16px 0;
+}
+.smoothing-left{
+  flex: 0 0 260px;
+  font-size: 30px;
+  color: var(--text);
+}
+.smoothing-right{
+  flex: 1 1 auto;
+}
+
+.prob-block{
+  font-size: 26px;
+  line-height: 1.35;
+  color: var(--text);
+  white-space: nowrap;
+}
+.prob-block .other{
+  color: var(--other);
+  font-weight: 800;
+}
+
+/* make SVG crisp */
+.smoothing-slide svg text{
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+  fill: #111;
 }

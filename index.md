@@ -27,12 +27,12 @@ This course covers the foundations and modern frontiers of Natural Language Proc
 - **Course Info:** Spring 2026, Fudan University
 - **Instructor:** [Baojian Zhou](https://baojian.github.io/), Email: bjzhou AT fudan.edu.cn
 - **TAs:**
-  - Coming soon
-  - Coming soon
+  - Binbin Huang
+  - Runze Wang
   - Coming soon
 - **Time:** 03/05/2026–06/18/2026, Thu., 1:30 pm – 4:10 pm, <a href="assets/Fudan-2026-spring-calendar.pdf" target="_blank" rel="noopener">Fudan Calendar</a>
-- **Location:** Coming Soon
-- **Office Hours:** 10:00 am – 1:00 pm, Thu & 611
+- **Location:** HGX104
+- **Office Hours:** 10:00 am – 1:00 pm, Wed & C611
 
 
 
@@ -52,12 +52,12 @@ All standard homework assignments are completed by **Week 12**. The final month 
 - **Scope:** Build a mini-Transformer; visualize attention heads.
 - **Track B Requirement:** Implement `MultiHeadAttention` in raw PyTorch without `nn.Transformer`.
 
-### Assignment 3. LLM Lifecycle: Fine-tuning
+### Assignment 3. LLM Lifecycle: Fine-tuning (Tentative)
 - **Due:** Week 10
 - **Scope:** Parameter-Efficient Fine-Tuning (LoRA) of a small Llama/Qwen model on a custom instruction set.
 - **Eval:** Compare pre-trained vs. fine-tuned performance on specific tasks.
 
-### Assignment 4. RAG Systems
+### Assignment 4. RAG and Agent Systems (Tentative)
 - **Due:** Week 12
 - **Scope:** Build a vertical QA system (e.g., "Textbook Chatbot"). Index a specific PDF/Corpus, implement retrieval + generation loop, and evaluate hallucination rates using automated metrics.
 
@@ -66,14 +66,22 @@ All standard homework assignments are completed by **Week 12**. The final month 
 - **Teams:** 2-3 Students.
 - **Deliverables:**
   - **Week 9:** 1-page Project Proposal (Problem, Dataset, Baselines).
-  - **Week 14:** Status Check / Preliminary Results.
-  - **Week 16:** Final Report + Presentation.
+  - **Week 12/13:** Status Check / Preliminary Results (Presentation).
+  - **Week 16:** Final Report
 - **Tracks:**
   - *Research:* Novel architecture, loss function, or extensive ablation study.
   - *Application:* End-to-end tool/agent with UI (Streamlit/Gradio).
   - *Systems:* High-performance inference engine or quantization study.
 
 ---
+
+## Coursework
+
+- **Participation (5%)**
+- **Exercise (15%)**
+- **Assignments (40-45%)**
+- **Final Project (35-40%)**
+
 
 ## Resources and References
 
@@ -91,7 +99,7 @@ Use of AI coding assistants **is permitted**. However, you should explicitly att
 
 ## GPU Resources
 
-- **Coming sonn**
+- **Please register CFFF an account at [Fudan CFFF](http://cfff.fudan.edu.cn/home).**
 
 ---
 
@@ -104,13 +112,12 @@ Use of AI coding assistants **is permitted**. However, you should explicitly att
 > - Thu., 1:30 pm – 4:10 pm, 03/05/2026
 > - **Slides:** <a href="slides/lecture-01-slides/index.md" target="_blank" rel="noopener">Lecture 01 slides</a>
 > - **Readings:**
->   - <a href="lecture-01/readings-0-JM%20Book%20Chapter%202.pdf" target="_blank" rel="noopener">JM Book Chapter 2</a>
->   - <a href="lecture-01/readings-1-Advances%20in%20NLP.pdf" target="_blank" rel="noopener">Advances in NLP</a>
->   - <a href="lecture-01/readings-2-Human%20Language%20Understanding%20and%20Reasoning.pdf" target="_blank" rel="noopener">Human Language Understanding and Reasoning</a>
->   - <a href="lecture-01/readings-3-Scaling%20Laws%20with%20Vocabulary-2407.13623v1.pdf" target="_blank" rel="noopener">Scaling Laws with Vocabulary (2407.13623v1)</a>
->   - <a href="lecture-01/readings-4-Getting%20the%20most%20out%20of%20your%20tokenizer%20for%20pre-training.pdf" target="_blank" rel="noopener">Getting the most out of your tokenizer for pre-training</a>
-> - **Notes:**
-> - **Excercise:**
+>   - <a href="papers/lecture-01-readings-0-JM_Book_Chapter_2.pdf" target="_blank" rel="noopener">JM Book Chapter 2</a>
+>   - <a href="papers/lecture-01-readings-1-Advances_in_NLP-2015.pdf" target="_blank" rel="noopener">Advances in NLP</a>
+>   - <a href="papers/lecture-01-readings-2-Human_Language_Understanding_and_Reasoning-2022.pdf" target="_blank" rel="noopener">Human Language Understanding and Reasoning</a>
+>   - <a href="papers/lecture-01-readings-3-Scaling_Laws_with_Vocabulary-2024.pdf" target="_blank" rel="noopener">Scaling Laws with Vocabulary (2407.13623v1)</a>
+>   - <a href="papers/lecture-01-readings-4-Getting_the_most_out_of_your_tokenizer_for_pre-training-2024.pdf" target="_blank" rel="noopener">Getting the most out of your tokenizer for pre-training</a>
+> - **Excercise: <a href="https://github.com/baojian/llm-26/blob/main/lecture-01-tokenization/lecture-01-exercise-tokenization.ipynb" target="_blank" rel="noopener">lecture-01-exercise-tokenization.ipynb</a>**
 
 **Release Assignment 1**
 
@@ -125,9 +132,7 @@ In this lecture, we introduce the concept of MLE, Smoothing, Perplexity, and Lan
   - <a href="lecture-01/readings-2-Human%20Language%20Understanding%20and%20Reasoning.pdf" target="_blank" rel="noopener">Human Language Understanding and Reasoning</a>
   - <a href="lecture-01/readings-3-Scaling%20Laws%20with%20Vocabulary-2407.13623v1.pdf" target="_blank" rel="noopener">Scaling Laws with Vocabulary (2407.13623v1)</a>
   - <a href="lecture-01/readings-4-Getting%20the%20most%20out%20of%20your%20tokenizer%20for%20pre-training.pdf" target="_blank" rel="noopener">Getting the most out of your tokenizer for pre-training</a>
-- **Notes:**
 - **Excercise:**
-- 
 
 ### Week 3 Word Embeddings
 
@@ -191,7 +196,7 @@ RLHF (PPO/DPO), Safety barriers, Red-teaming
 
 KV Caching, Quantization (Int8/FP4), Latency/Throughput
 
-### Week 16 Frontiers
+### Week 16 Agents and Frontiers
 
 Multimodal LLMs, Diffusion LMs, Future Directions
 
