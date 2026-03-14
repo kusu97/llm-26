@@ -1,10 +1,10 @@
 name: llm-26-gpu
 channels:
-  - pytorch
-  - nvidia
   - conda-forge
+  - defaults
 dependencies:
   - python=3.12
+  - pip
   - jupyterlab
   - ipykernel
   - ipywidgets
@@ -15,26 +15,16 @@ dependencies:
   - tqdm
   - networkx
   - psutil
-  - spacy
-  - tiktoken
-  - datasets
-  - transformers
-  - huggingface_hub
-  - modelscope
-  - regex
-  - addict
-  - spacy-pkuseg
-  - spacy-model-en_core_web_sm
-  - spacy-model-zh_core_web_sm
   - nbconvert
-
-  # Force GPU PyTorch from pytorch channel
-  - pytorch::pytorch
-  - pytorch::torchvision
-  - pytorch::torchaudio
-  - pytorch-cuda=12.1
-
-  # Local LLM
-  - conda-forge::ollama
-  - ollama-python
-  - requests
+  - pip:
+      - requests
+      - regex
+      - addict
+      - spacy
+      - spacy-pkuseg
+      - tiktoken
+      - datasets
+      - transformers
+      - huggingface_hub
+      - modelscope
+      - ollama-python
