@@ -2396,209 +2396,818 @@
 
 ---
 
-<!-- .slide: class="ppt" -->
-## Training word2vec <span style="color:#1f77b4; font-size:0.75em;">running example setup</span>
+<section class="ppt">
+  <div class="ppt-title">Training word2vec: Initialization of \(\theta\)</div>
+  <div class="ppt-line"></div>
 
-- Example sentence: **Ned Stark is the most honorable man**
-- Target word: <span style="color:#63a33b;"><b>Ned</b></span>
-- Positive context word: <span style="color:#e67e22;"><b>Stark</b></span>
-- Negative samples:
-  <span style="background:#fff3a3; padding:0 0.15em;">pimples</span>,
-  <span style="background:#fff3a3; padding:0 0.15em;">zebra</span>,
-  <span style="background:#fff3a3; padding:0 0.15em;">idiot</span>
+  <div class="ppt-body" style="display:flex; gap:28px; align-items:flex-start; margin-top:16px;">
+    <!-- Left column -->
+    <div style="flex:0.98;">
+      <div style="font-size:0.8em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Initialization strategy
+      </div>
+      <div style="font-size:0.7em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        The model parameters are two matrices:
+        \[
+        W_{\text{in}} \in \mathbb{R}^{|V|\times d},
+        \qquad
+        W_{\text{out}} \in \mathbb{R}^{|V|\times d}.
+        \]
+      </div>
+      <div style="font-size:0.7em; line-height:1.45; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        <div style="margin-bottom:8px;">
+          <b>Input matrix \(W_{\text{in}}\):</b> initialize with small random values $W_{\text{in}}[a,b] = \frac{x}{d},
+          \qquad x \sim U(-0.5,\,0.5).
+          $
+        </div>
+        <div>
+          <b>Output matrix \(W_{\text{out}}\):</b> initialize as zeros $W_{\text{out}}[a,b] = 0.$
+        </div>
+      </div>
+      <div style="font-size:0.7em; line-height:1.45; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px;">
+        <b>Why this design?</b><br>
+        Small random values break symmetry for target embeddings, while zero of
+        \(W_{\text{out}}\) is simple and works well in the original implementation.
+      </div>
+    </div>
+    <!-- Right column -->
+    <div style="flex:1.02;">
+      <div style="font-size:0.8em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Corresponding implementation idea
+      </div>
+      <div style="font-size:0.7em; line-height:1.35; background:#1e1e1e; color:#f3f3f3; border:1px solid #444; border-radius:12px; padding:12px 14px; font-family:Menlo, Monaco, Consolas, monospace;">
+<pre style="margin:0; white-space:pre-wrap; font-size:0.92em; line-height:1.35; color:#f3f3f3;">
+allocate memory for Win and Wout
 
-- Input embedding matrix: \(W_{\text{in}} \in \mathbb{R}^{|V|\times d}\)
-- Output embedding matrix: \(W_{\text{out}} \in \mathbb{R}^{|V|\times d}\)
-
-<div style="margin-top:0.8em; padding:0.7em 0.9em; border:1px solid #d9deea; border-radius:12px; background:#f7f8fc; font-size:0.9em;">
-For one training case, we only update:
-\[
-\mathbf{w}_{\text{Ned}},\quad
-\mathbf{c}_{\text{Stark}},\quad
-\mathbf{c}_{\text{pimples}},\quad
-\mathbf{c}_{\text{zebra}},\quad
-\mathbf{c}_{\text{idiot}}.
-\]
-</div>
-
-<div style="margin-top:0.9em; text-align:center; font-weight:700; color:#1f4ba5;">
-One positive pair + a few negative pairs
-</div>
-
----
-
-<!-- .slide: class="ppt" -->
-## Training word2vec <span style="color:#1f77b4; font-size:0.75em;">forward pass</span>
-
-- One-hot input for <span style="color:#63a33b;"><b>Ned</b></span> selects its row from \(W_{\text{in}}\):
-\[
-\mathbf{h} = \mathbf{w}_{\text{Ned}} = [-0.018,\;0.404,\;-0.317]^\top
-\]
-
-- Score each candidate context word by dot product:
-\[
-s_j = \mathbf{c}_j^\top \mathbf{h}
-\]
-
-- Convert score to probability by sigmoid:
-\[
-p_j = \sigma(s_j)
-\]
-
-<div style="margin-top:0.7em; font-size:0.9em;">
-
-| Pair | Score \(s_j\) | Probability \(\sigma(s_j)\) | Label \(t_j\) |
-|---|---:|---:|---:|
-| \((\text{Ned}, \text{Stark})\) | \(0.508\) | \(0.624\) | \(1\) |
-| \((\text{Ned}, \text{pimples})\) | \(0.213\) | \(0.553\) | \(0\) |
-| \((\text{Ned}, \text{zebra})\) | \(0.136\) | \(0.534\) | \(0\) |
-| \((\text{Ned}, \text{idiot})\) | \(-0.132\) | \(0.467\) | \(0\) |
-
-</div>
-
-<div style="margin-top:0.7em; padding:0.7em 0.9em; border:1px solid #eed9b6; border-radius:12px; background:#fff8f0; font-size:0.9em;">
-Loss for this training case:
-\[
-J
-=
--\log \sigma(\mathbf{c}_{pos}^{\top}\mathbf{h})
--\sum_{i=1}^{3}\log \sigma(-\mathbf{c}_{neg_i}^{\top}\mathbf{h})
-\]
-</div>
+for a = 0, ..., |V|-1:
+    for b = 0, ..., d-1:
+        Win[a,b]  = random(-0.5, 0.5) / d
+        Wout[a,b] = 0
+</pre>
+      </div>
+      <div style="margin-top:12px; font-size:0.7em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px;">
+        In the original C code:
+        <div style="margin-top:6px;">
+          • <code>syn0</code> corresponds to $W_{\text{in}}$<br>
+          • <code>syn1neg</code> corresponds to $W_{\text{out}}$<br>
+          • <code>posix_memalign</code> is used to allocate memory
+        </div>
+      </div>
+      <div style="margin-top:12px; text-align:center; font-size:0.72em; color:#1f4ba5;">
+        <a href="https://github.com/tmikolov/word2vec/" target="_blank">Original word2vec implementation</a>
+      </div>
+    </div>
+  </div>
+</section>
 
 ---
 
-<!-- .slide: class="ppt" -->
-## Training word2vec <span style="color:#1f77b4; font-size:0.75em;">backward pass: prediction error and \(\nabla \mathbf{w}_{in}\)</span>
+<section class="ppt">
+  <div class="ppt-title">Training word2vec: Window and Visualization</div>
+  <div class="ppt-line"></div>
 
-- Prediction error for each selected output row:
-\[
-\delta_j = \sigma(\mathbf{c}_j^\top \mathbf{h}) - t_j
-\]
-
-<div style="margin-top:0.6em; font-size:0.92em;">
-
-| Word \(j\) | \(\sigma(\mathbf{c}_j^\top \mathbf{h})\) | \(t_j\) | \(\delta_j\) |
-|---|---:|---:|---:|
-| Stark | \(0.624\) | \(1\) | \(-0.376\) |
-| pimples | \(0.553\) | \(0\) | \(0.553\) |
-| zebra | \(0.534\) | \(0\) | \(0.534\) |
-| idiot | \(0.467\) | \(0\) | \(0.467\) |
-
-</div>
-
-- Gradient w.r.t. the target embedding:
-\[
-\frac{\partial J}{\partial \mathbf{w}}
-=
-(\sigma(\mathbf{c}_{pos}^\top \mathbf{w})-1)\mathbf{c}_{pos}
-+
-\sum_{i=1}^{3}\sigma(\mathbf{c}_{neg_i}^\top \mathbf{w})\mathbf{c}_{neg_i}
-\]
-
-- For this example:
-\[
-\nabla \mathbf{w}_{in}
-=
-[-0.932,\;0.319,\;0.655]^\top
-\]
-
-<div style="margin-top:0.8em; padding:0.7em 0.9em; border:1px solid #d9deea; border-radius:12px; background:#f7f8fc; font-size:0.9em;">
-Interpretation: the target vector <b>Ned</b> is pushed
-toward <b>Stark</b> and away from the negative samples.
-</div>
-
----
-
-<!-- .slide: class="ppt" -->
-## Training word2vec <span style="color:#1f77b4; font-size:0.75em;">backward pass: \(\nabla \mathbf{w}_{out}\)</span>
-
-- Positive context gradient:
-\[
-\frac{\partial J}{\partial \mathbf{c}_{pos}}
-=
-(\sigma(\mathbf{c}_{pos}^\top \mathbf{w})-1)\mathbf{w}
-\]
-
-- Negative context gradients:
-\[
-\frac{\partial J}{\partial \mathbf{c}_{neg_i}}
-=
-\sigma(\mathbf{c}_{neg_i}^\top \mathbf{w})\mathbf{w}
-\]
-
-<div style="margin-top:0.7em; font-size:0.9em;">
-
-| Updated row in \(W_{out}\) | Gradient |
-|---|---|
-| \(\nabla \mathbf{c}_{\text{Stark}}\) | \([\,0.007,\;-0.152,\;0.119\,]\) |
-| \(\nabla \mathbf{c}_{\text{pimples}}\) | \([\, -0.010,\;0.223,\;-0.175\,]\) |
-| \(\nabla \mathbf{c}_{\text{zebra}}\) | \([\, -0.010,\;0.216,\;-0.169\,]\) |
-| \(\nabla \mathbf{c}_{\text{idiot}}\) | \([\, -0.008,\;0.189,\;-0.148\,]\) |
-
-</div>
-
-<div style="margin-top:0.8em; padding:0.7em 0.9em; border:1px solid #eed9b6; border-radius:12px; background:#fff8f0; font-size:0.9em;">
-Only a <b>few rows</b> of \(W_{out}\) are touched in one SGD step:
-one positive context row and a few sampled negative rows.
-</div>
+  <div class="ppt-body" style="display:flex; gap:28px; align-items:flex-start; margin-top:16px;">
+    <!-- Left column -->
+    <div style="flex:0.95;">
+      <div style="font-size:0.8em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Effect of window size
+      </div>
+      <div style="font-size:0.7em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        <div style="margin-bottom:10px;">
+          <b>Small window</b> (\(c=\pm 2\))
+        </div>
+        <div style="margin-left:0.4em; margin-bottom:6px;">
+          • emphasizes <span style="color:#12a150; font-weight:700;">syntactic similarity</span>
+        </div>
+        <div style="margin-left:0.4em; margin-bottom:10px;">
+          • nearest neighbors are often words in the same category or taxonomy
+        </div>
+        <div style="margin-bottom:10px;">
+          <b>Large window</b> (\(c=\pm 5\))
+        </div>
+        <div style="margin-left:0.4em; margin-bottom:6px;">
+          • emphasizes <span style="color:#12a150; font-weight:700;">semantic relatedness</span>
+        </div>
+        <div style="margin-left:0.4em;">
+          • nearest neighbors are often words in the same semantic field
+        </div>
+        For a word like <b>Hogwarts</b>: with a <b>small window</b>, neighbors may be other fictional schools; with a <b>large window</b>, neighbors may come from the broader Harry Potter world
+      </div>
+    </div>
+    <!-- Right column -->
+    <div style="flex:1.05;">
+      <div style="font-size:0.8em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Visualizing learned embeddings
+      </div>
+      <div style="font-size:0.7em; line-height:1.45; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        A useful tool is the
+        <a href="https://projector.tensorflow.org/" target="_blank">TensorFlow Embedding Projector</a>.
+        It lets us inspect neighborhoods and 2D projections of word vectors.
+      </div>
+      <div style="font-size:0.7em; line-height:1.4; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:10px 12px; margin-bottom:12px;">
+        <img
+          src="media/tensorflow-embedding.png"
+          alt="TensorFlow Embedding Projector"
+          style="width:100%; max-width:520px; display:block; margin:0 auto; border:none; box-shadow:none; background:none;"
+        >
+      </div>
+      <div style="font-size:0.7em; line-height:1.45; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px;">
+        Try searching for words such as <b>apple</b> or <b>linux</b>, and compare: nearest neighbors; PCA / t-SNE / UMAP projections
+      </div>
+    </div>
+  </div>
+</section>
 
 ---
 
-<!-- .slide: class="ppt" -->
-## Training word2vec <span style="color:#1f77b4; font-size:0.75em;">SGD parameter update</span>
+<section class="ppt">
+  <div class="ppt-title">Embedding Evaluation: Word Similarity</div>
+  <div class="ppt-line"></div>
 
-- With learning rate \(\eta = 0.05\), update by
-\[
-\theta \leftarrow \theta - \eta \nabla_\theta J
-\]
+  <div class="ppt-body" style="display:flex; gap:28px; align-items:flex-start; margin-top:16px;">
+    <!-- Left column -->
+    <div style="flex:1.0;">
+      <div style="font-size:0.8em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Intrinsic evaluation
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        The question is:
+        <span style="color:#12a150; font-weight:700;">do embeddings capture human notions of meaning?</span>
+        <div style="margin-top:8px;">
+          A simple proxy is <b>word similarity</b>: words with similar meanings
+          should have similar vectors.
+        </div>
+      </div>
+      <div style="font-size:0.8em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Evaluation procedure
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px;">
+        <div style="margin-bottom:6px;">
+          1. Take a benchmark set of word pairs with human scores
+        </div>
+        <div style="margin-bottom:6px;">
+          2. Compute cosine similarity for each pair
+          \[
+          \cos(\mathbf{u},\mathbf{v})=\frac{\mathbf{u}^{\top}\mathbf{v}}{\|\mathbf{u}\|\,\|\mathbf{v}\|}
+          \]
+        </div>
+        <div style="margin-bottom:6px;">
+          3. Rank all pairs by model similarity
+        </div>
+        <div>
+          4. Compare model ranking with human ranking using
+          <b>Spearman correlation</b> \(\rho\)
+        </div>
+      </div>
+    </div>
+    <!-- Right column -->
+    <div style="flex:1.0;">
+      <div style="font-size:0.8em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Common benchmarks
+      </div>
+      <div style="font-size:0.6em; line-height:1.4; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        <div style="margin-bottom:6px;">
+          • <b>WordSim-353; MEN</b>
+        </div>
+        <div style="margin-bottom:6px;">
+          • <b>Rare Words; SimLex-999</b>
+        </div>
+      </div>
+      <div style="font-size:0.8em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Example word pairs
+      </div>
+      <div style="font-size:0.6em; line-height:1.38; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:10px 12px; margin-bottom:12px;">
+        <table style="width:100%; border-collapse:collapse; text-align:center; font-size:0.95em;">
+          <tr style="background:#4d79c7; color:white;">
+            <th style="padding:4px;">word 1</th>
+            <th style="padding:4px;">word 2</th>
+            <th style="padding:4px;">human score</th>
+          </tr>
+          <tr><td style="padding:4px;">vulgarism</td><td>profanity</td><td>9.62</td></tr>
+          <tr style="background:#eef2fb;"><td style="padding:4px;">friendships</td><td>brotherhood</td><td>7.50</td></tr>
+          <tr><td style="padding:4px;">misleading</td><td>beat</td><td>1.25</td></tr>
+          <tr style="background:#eef2fb;"><td style="padding:4px;">radiators</td><td>beginning</td><td>0.00</td></tr>
+        </table>
+      </div>
+      <div style="font-size:0.7em; line-height:1.45; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px;">
+        <b>Interpretation:</b> a higher score means the embedding space agrees more with human similarity judgments.
+      </div>
+    </div>
+  </div>
+</section>
 
-### Update target row in \(W_{in}\)
+---
 
-\[
-\mathbf{w}_{\text{Ned}}^{old}
-=
-[-0.018,\;0.404,\;-0.317]
-\]
+<section class="ppt">
+  <div class="ppt-title">Embedding Evaluation: Word Analogy</div>
+  <div class="ppt-line"></div>
 
-\[
-\mathbf{w}_{\text{Ned}}^{new}
-=
-\mathbf{w}_{\text{Ned}}^{old}
--
-0.05 \cdot [-0.932,\;0.319,\;0.655]
-=
-[0.029,\;0.388,\;-0.350]
-\]
+  <div class="ppt-body" style="display:flex; gap:28px; align-items:flex-start; margin-top:16px;">
+    <!-- Left column -->
+    <div style="flex:1.0;">
+      <div style="font-size:0.8em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Analogy task
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        Evaluate whether embeddings preserve simple relational patterns:
+        <div style="text-align:center; margin:8px 0; font-weight:700; color:#12a150;">
+          “a is to a* as b is to b*”
+        </div>
+        Given \(a, a^*, b\), the model must predict the missing word \(b^*\)
+        from the vocabulary.
+      </div>
+      <div style="font-size:0.8em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Common benchmarks
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px;">
+        <div style="margin-bottom:8px;">
+          <b>MSR analogy dataset</b><br>
+          mostly morpho-syntactic questions, e.g.
+          <div style="margin-top:4px; color:#12a150; font-weight:700;">
+            good : best :: smart : smartest
+          </div>
+        </div>
+        <div>
+          <b>Google analogy dataset</b><br>
+          mixes syntactic and semantic relations, e.g.
+          <div style="margin-top:4px; color:#12a150; font-weight:700;">
+            Paris : France :: Tokyo : Japan
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Right column -->
+    <div style="flex:1.0;">
+      <div style="font-size:0.6em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Geometric intuition
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        A good embedding space often represents analogies as approximately
+        parallel vector offsets:
+        $\mathbf{v}(a^*)-\mathbf{v}(a)\;\approx\;\mathbf{v}(b^*)-\mathbf{v}(b).$
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        To solve the analogy, compute
+        $\mathbf{q}=\mathbf{v}(a^*)-\mathbf{v}(a)+\mathbf{v}(b)$ and return the vocabulary word whose embedding is nearest to \(\mathbf{q}\)
+        (usually by cosine similarity).
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px;">
+        <div style="margin-bottom:8px;">
+          <b>Semantic example</b><br>
+          \[
+          \mathbf{v}(\text{king})-\mathbf{v}(\text{man})+\mathbf{v}(\text{woman})
+          \approx
+          \mathbf{v}(\text{queen})
+          \]
+        </div>
+        <div>
+          <b>Syntactic example</b><br>
+          \[
+          \mathbf{v}(\text{kings})-\mathbf{v}(\text{king})+\mathbf{v}(\text{queen})
+          \approx
+          \mathbf{v}(\text{queens})
+          \]
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:14px; text-align:center; font-size:0.78em; font-weight:700; color:#1f4ba5;">
+    Analogy evaluation asks whether linear relations of embeddings match human semantic
+  </div>
+</section>
 
-### Update selected rows in \(W_{out}\)
+---
 
-\[
-\mathbf{c}_{\text{Stark}}^{new}
-=
-[0.116,\;0.731,\;-0.695]
-\]
+<section class="ppt">
+  <div class="ppt-title">Embedding Evaluation: Solving Word Analogies</div>
+  <div class="ppt-line"></div>
 
-\[
-\mathbf{c}_{\text{pimples}}^{new}
-=
-[-0.940,\;0.590,\;0.155]
-\]
+  <div class="ppt-body" style="display:flex; gap:28px; align-items:flex-start; margin-top:16px;">
+    <!-- Left column -->
+    <div style="flex:1.02;">
+      <div style="font-size:0.8em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Vector arithmetic view
+      </div>
+      <div style="font-size:0.7em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        Both <b>sparse</b> and <b>dense</b> embeddings can be tested by analogy.
+        The basic idea is that some relations are encoded as vector offsets:
+        <div style="margin-top:8px; text-align:center;">
+          \[
+          \mathbf{v}(a^*) - \mathbf{v}(a) + \mathbf{v}(b) \approx \mathbf{v}(b^*)
+          \]
+        </div>
+      </div>
+      <div style="font-size:0.7em; line-height:1.45; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        <div style="margin-bottom:6px;">
+          <b>Example 1: </b> king − man + woman \(\approx\) queen
+        </div>
+        <div style="margin-top:10px; margin-bottom:6px;">
+          <b>Example 2: </b> Paris − France + Italy \(\approx\) Rome
+        </div>
+      </div>
+      <div style="font-size:0.8em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Retrieval rule
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px;">
+        For the analogy $a : a^* :: b : b^*$ compute the query vector
+        $\mathbf{q} = \mathbf{v}(a^*) - \mathbf{v}(a) + \mathbf{v}(b),$
+        then search for the closest word vector in the vocabulary
+        (excluding \(a, a^*, b\)).
+      </div>
+    </div>
+    <!-- Right column -->
+    <div style="flex:0.98;">
+      <div style="font-size:0.6em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Benchmark comparison
+      </div>
+      <div style="font-size:0.6em; line-height:1.38; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:10px 12px; margin-bottom:12px;">
+        <table style="width:100%; border-collapse:collapse; text-align:center; font-size:0.95em;">
+          <tr style="background:#4d79c7; color:white;">
+            <th style="padding:4px;">Method</th>
+            <th style="padding:4px;">Google<br>Add / Mul</th>
+            <th style="padding:4px;">MSR<br>Add / Mul</th>
+          </tr>
+          <tr>
+            <td style="padding:4px; font-weight:700;">PPMI</td>
+            <td>.553 / .629</td>
+            <td>.289 / .413</td>
+          </tr>
+          <tr style="background:#eef2fb;">
+            <td style="padding:4px; font-weight:700;">SVD</td>
+            <td>.547 / .587</td>
+            <td>.402 / .457</td>
+          </tr>
+          <tr>
+            <td style="padding:4px; font-weight:700;">SGNS</td>
+            <td><b>.599</b> / <b>.625</b></td>
+            <td>.514 / .546</td>
+          </tr>
+          <tr style="background:#eef2fb;">
+            <td style="padding:4px; font-weight:700;">GloVe</td>
+            <td>.539 / .563</td>
+            <td>.503 / .559</td>
+          </tr>
+          <tr>
+            <td style="padding:4px; font-weight:700;">CBOW</td>
+            <td>.547 / .591</td>
+            <td><b>.557</b> / <b>.598</b></td>
+          </tr>
+        </table>
+      </div>
+      <div style="font-size:0.6em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Takeaway
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px;">
+        <div style="margin-bottom:8px;">
+          Analogy evaluation tests whether the embedding space preserves
+          <b>relational structure</b>, not just pairwise similarity.
+        </div>
+        <div style="margin-bottom:8px;">
+          <b>SGNS</b> and <b>CBOW</b> are among the strongest methods. The evaluation is simple: <b>form a vector query, retrieve the nearest word, and check whether it is correct.</b>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-\[
-\mathbf{c}_{\text{zebra}}^{new}
-=
-[-0.622,\;0.800,\;0.648]
-\]
+---
 
-\[
-\mathbf{c}_{\text{idiot}}^{new}
-=
-[-0.077,\;-0.384,\;-0.049]
-\]
+<section class="ppt">
+  <div class="ppt-title">Applications: Embeddings Reveal Semantic Change</div>
+  <div class="ppt-line"></div>
 
-<div style="margin-top:0.8em; padding:0.7em 0.9em; border:1px solid #d9deea; border-radius:12px; background:#f7f8fc; font-size:0.9em;">
-<b>Takeaway:</b> one SGD step
-pulls <b>Ned</b> closer to <b>Stark</b>,
-and pushes it away from the sampled negative words.
+  <div class="ppt-body" style="margin-top:16px;">
+    <div style="font-size:0.6em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+      Diachronic word embeddings
+    </div>
+    <div style="font-size:0.6em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+      Train embeddings on texts from different historical periods, then compare the neighborhoods of the same word across decades.
+      If the nearby words change, that suggests the word’s meaning or usage has shifted over time.
+    </div>
+    <div style="background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 12px; margin-bottom:12px;">
+      <img
+        src="media/embedding-semantic-change.png"
+        alt="Semantic change revealed by diachronic word embeddings"
+        style="width:100%; max-width:1100px; display:block; margin:0 auto; border:none; box-shadow:none; background:none;"
+      >
+    </div>
+    <div style="font-size:0.6em; line-height:1.42; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px;">
+      <b>Examples in the figure:</b>
+      <div style="margin-top:6px;">
+        • <b>gay</b> shifts from “cheerful / bright” toward sexual-identity-related usage
+      </div>
+      <div style="margin-top:4px;">
+        • <b>broadcast</b> shifts from “spread / scatter” toward radio and television
+      </div>
+      <div style="margin-top:4px;">
+        • <b>awful</b> shifts from “solemn / majestic” toward strongly negative meaning
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:14px; text-align:center; font-size:0.72em; color:#555;">
+    Hamilton, Leskovec, and Jurafsky (2016), <i>Diachronic Word Embeddings Reveal Statistical Laws of Semantic Change</i>, ACL.
+  </div>
+</section>
+
+---
+
+<section class="ppt">
+  <div class="ppt-title">Applications: Semantic Change</div>
+  <div class="ppt-line"></div>
+  <div class="ppt-body" style="display:flex; gap:24px; align-items:flex-start; margin-top:16px;">
+    <!-- Left column -->
+    <div style="flex:0.95;">
+      <div style="font-size:0.6em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Diachronic word embeddings
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        Train embeddings on texts from different historical periods, then compare the neighborhoods of the same word across decades.
+        If the nearby words change, that suggests the word’s meaning or usage has shifted over time.
+      </div>
+      <div style="font-size:0.6em; line-height:1.42; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px;">
+        <b>Examples in the figure:</b>
+        <div style="margin-top:6px;">
+          • <b>gay</b> shifts from “cheerful / bright” toward sexual-identity-related usage
+        </div>
+        <div style="margin-top:4px;">
+          • <b>broadcast</b> shifts from “spread / scatter” toward radio and television
+        </div>
+        <div style="margin-top:4px;">
+          • <b>awful</b> shifts from “solemn / majestic” toward strongly negative meaning
+        </div>
+      </div>
+    </div>
+    <!-- Right column -->
+    <div style="flex:1.05;">
+    <div style="height:100px;"></div>
+      <div style="background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 12px; margin-bottom:10px;">
+        <img
+          src="media/embedding-semantic-change.png"
+          alt="Semantic change revealed by diachronic word embeddings"
+          style="width:100%; max-width:760px; display:block; margin:0 auto; border:none; box-shadow:none; background:none;"
+        >
+      </div>
+      <div style="font-size:0.52em; line-height:1.35; color:#555; text-align:center;">
+  Hamilton, Leskovec, and Jurafsky (2016),<br>
+  <a href="https://arxiv.org/abs/1605.09096" target="_blank">
+    <i>Diachronic Word Embeddings Reveal Statistical Laws of Semantic Change, ACL.</i>
+  </a>
+    </div>
+    </div>
+  </div>
+</section>
+
+---
+
+<section class="ppt">
+  <div class="ppt-title">Embeddings for Sentences and Documents</div>
+  <div class="ppt-line"></div>
+
+  <div class="ppt-body" style="display:flex; gap:24px; align-items:flex-start; margin-top:16px;">
+    <!-- Left column -->
+    <div style="flex:0.9;">
+      <div style="font-size:0.6em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Main idea
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        <div style="margin-bottom:8px;">
+          Learn a <b>dense vector</b> not only for each word, but also for a
+          <b>sentence</b>, <b>paragraph</b>, or <b>document</b>; The vector representation is trained to be useful for
+          <b>predicting words in the paragraph</b>.
+        </div>
+      </div>
+      <div style="font-size:0.6em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Why do this?
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        <div style="margin-bottom:6px;">
+          • Bag-of-words ignores <b>word order</b> and <b>global context</b>
+        </div>
+        <div style="margin-bottom:6px;">
+          • Averaging word vectors is simple, but may lose document-level information; A document embedding provides a compact representation for
+          classification, retrieval, and similarity
+        </div>
+      </div>
+    </div>
+    <!-- Right column -->
+    <div style="flex:1.1;">
+    <div style="font-size:0.6em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Classic method
+      </div>
+      <div style="font-size:0.6em; line-height:1.42; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px;">
+        <b>Paragraph Vector / Doc2Vec</b><br>
+        learn a paragraph ID vector together with word vectors, then use the learned
+        paragraph vector as the document representation.
+      </div>
+      <div style="background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 12px; margin-bottom:10px;">
+        <img
+          src="media/embedding-paragraph-vector.png"
+          alt="Paragraph Vector / Doc2Vec overview"
+          style="width:50%; max-width:760px; display:block; margin:0 auto; border:none; box-shadow:none; background:none;"
+        >
+      </div>
+      <div style="font-size:0.52em; line-height:1.35; color:#555; text-align:center;">
+        Le and Mikolov (2014), 
+        <a href="https://proceedings.mlr.press/v32/le14.html" target="_blank">
+          <i>Distributed Representations of Sentences and Documents</i>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:12px; text-align:center; font-size:0.78em; font-weight:700; color:#1f4ba5;">
+    extend word embeddings to paragraph-level vectors for richer sentence/document representations
+  </div>
+</section>
+
+---
+
+<section class="ppt">
+  <div class="ppt-title">Other Static Embeddings: CBOW vs. Skip-gram</div>
+  <div class="ppt-line"></div>
+
+  <div class="ppt-body" style="display:flex; gap:28px; align-items:flex-start; margin-top:16px;">
+    <!-- Left column -->
+    <div style="flex:0.95;">
+      <div style="font-size:0.7em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Two word2vec training styles
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        <div style="margin-bottom:8px;">
+          <b>Skip-gram:</b> use the center word to predict nearby words; <b>CBOW:</b> use nearby context words to predict the center
+        </div>
+      </div>
+      <div style="font-size:0.7em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Example
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+         <div style="text-align:center; font-size:1.0em; margin:8px 0;">
+        Sentence:  I <span style="color:#12a150;">like to</span> ___ <span style="color:#12a150;">apples and</span> bananas
+        </div>
+        <div style="margin-bottom:6px;">
+          <b>CBOW:</b> from context words <b>like, to, apples, and</b>, predict the missing word; likely answer: <b>eat</b>
+        </div>
+      </div>
+      <div style="font-size:0.7em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Key modeling idea
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px;">
+        In CBOW, the context word vectors are typically
+        <b>summed or averaged</b>, then used to predict the target word.
+        The order of the context words is usually ignored.
+      </div>
+    </div>
+    <!-- Right column -->
+    <div style="flex:1.05;">
+      <div style="font-size:0.7em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Comparison
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        <table style="width:100%; border-collapse:collapse; text-align:left; font-size:0.96em;">
+          <tr style="background:#4d79c7; color:white;">
+            <th style="padding:6px;">Model</th>
+            <th style="padding:6px;">Input</th>
+            <th style="padding:6px;">Output</th>
+          </tr>
+          <tr>
+            <td style="padding:6px; font-weight:700;">Skip-gram</td>
+            <td style="padding:6px;">center word</td>
+            <td style="padding:6px;">context words</td>
+          </tr>
+          <tr style="background:#eef2fb;">
+            <td style="padding:6px; font-weight:700;">CBOW</td>
+            <td style="padding:6px;">context words</td>
+            <td style="padding:6px;">center word</td>
+          </tr>
+        </table>
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        <div style="margin-bottom:6px;">
+          <b>CBOW</b> is usually faster and smoother, because it combines several context words into one prediction.
+        </div>
+        <div>
+          <b>Skip-gram</b> often works better for rare words, because each center word directly predicts multiple contexts.
+        </div>
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px;">
+        Both are <b>static embedding</b> methods:
+        each word type gets one fixed vector, regardless of sentence context.
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:14px; text-align:center; font-size:0.78em; font-weight:700; color:#1f4ba5;">
+    CBOW predicts the center word from its neighbors; Skip-gram does the reverse
+  </div>
+</section>
+
+---
+
+<section class="ppt">
+  <div class="ppt-title">Other Static Embeddings: SVD and GloVe</div>
+  <div class="ppt-line"></div>
+
+  <div class="ppt-body" style="display:flex; gap:28px; align-items:flex-start; margin-top:16px;">
+    <!-- Left column -->
+    <div style="flex:1.0;">
+      <div style="font-size:0.7em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        SVD / matrix factorization view
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        Start from a word-context matrix, often after weighting such as
+        <b>PPMI</b>.
+        Then factorize it:
+        \[
+        X \approx U\Sigma V^\top
+        \]
+        and use the low-rank rows of \(U\Sigma^{1/2}\) or related forms as word embeddings.
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px;">
+        <b>Main idea:</b> reduce a large sparse co-occurrence matrix
+        into a lower-dimensional dense space while preserving the main structure.
+      </div>
+    </div>
+    <!-- Right column -->
+    <div style="flex:1.0;">
+      <div style="font-size:0.7em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        GloVe / global co-occurrence view
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        GloVe learns vectors by fitting global co-occurrence statistics.
+        Roughly, it wants dot products to match log-counts:
+        \[
+        \mathbf{w}_i^\top \mathbf{c}_j + b_i + \tilde b_j
+        \approx
+        \log X_{ij}
+        \]
+        where \(X_{ij}\) is a word-context co-occurrence count.
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px;">
+        <b>Main idea:</b> combine the strengths of
+        <b>counting-based statistics</b> and <b>learned dense vectors</b>.
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:14px; display:flex; gap:18px;">
+    <div style="flex:1; font-size:0.6em; line-height:1.4; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:10px 12px;">
+      <b>SVD:</b> count first, then factorize
+    </div>
+    <div style="flex:1; font-size:0.6em; line-height:1.4; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:10px 12px;">
+      <b>GloVe:</b> learn vectors to match global counts
+    </div>
+  </div>
+  <div style="margin-top:12px; text-align:center; font-size:0.7em; font-weight:700; color:#1f4ba5;">
+    SVD and GloVe are two alternative ways to obtain static word embeddings from co-occurrence statistics
+  </div>
+</section>
+
+---
+
+<section class="ppt">
+  <div class="ppt-title">Other Static Embeddings: fastText</div>
+  <div class="ppt-line"></div>
+
+  <div class="ppt-body" style="display:flex; gap:28px; align-items:flex-start; margin-top:16px;">
+    <!-- Left column -->
+    <div style="flex:0.95;">
+      <div style="font-size:0.7em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Basic idea
+      </div>
+      <div style="font-size:0.7em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        fastText is similar to Skip-gram, but it does not treat a word as a single atomic symbol.
+        Instead, it represents a word using its <b>character n-grams</b>.
+      </div>
+      <div style="font-size:0.7em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Example
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px;">
+        For the word <b>where</b>, some subword units are:
+        <div style="margin-top:8px;">
+          • 3-grams: \(\langle wh, whe, her, ere, re \rangle\)
+        </div>
+        <div style="margin-top:4px;">
+          • 4-grams: \(\langle whe, wher, here, ere \rangle\)
+        </div>
+        <div style="margin-top:4px;">
+          • 5-grams: \(\langle wher, where, here \rangle\)
+        </div>
+      </div>
+    </div>
+    <!-- Right column -->
+    <div style="flex:1.05;">
+      <div style="font-size:0.7em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Representation
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        Instead of using only one vector for word \(w\), fastText uses the sum of its subword vectors:
+        \[
+        \mathbf{u}_w = \sum_{g \in \mathcal{G}(w)} \mathbf{z}_g
+        \]
+        where \(\mathcal{G}(w)\) is the set of n-grams of \(w\).
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        This makes fastText especially useful for:
+        <div style="margin-top:8px;">
+          • morphologically rich languages; rare words
+        </div>
+        <div style="margin-top:4px;">
+          • unseen words with familiar subword patterns
+        </div>
+      </div>
+      <div style="font-size:0.6em; line-height:1.45; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:12px 14px;">
+        <b>Key advantage:</b> unlike standard word2vec or GloVe,
+        fastText can produce a representation even for an out-of-vocabulary word,
+        as long as its character n-grams are known.
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:14px; text-align:center; font-size:0.78em; font-weight:700; color:#1f4ba5;">
+    fastText extends static embeddings from whole words to subword units
+  </div>
+</section>
+
+---
+
+<section class="ppt"><div class="ppt-title">Classic Word Embeddings</div><div class="ppt-line"></div><div class="ppt-body" style="display:flex;gap:24px;align-items:flex-start;margin-top:16px;">
+<div style="flex:0.95;"><div style="font-size:0.6em;font-weight:800;color:#1f4ba5;margin-bottom:8px;">Three classic static embeddings</div><div style="font-size:0.6em;line-height:1.42;background:#f7f8fc;border:1px solid #d9deea;border-radius:12px;padding:12px 14px;margin-bottom:10px;"><b>word2vec</b> <span style="color:#888;">(Mikolov et al., 2013)</span><div style="margin-top:4px;">Prediction-based embeddings trained with <b>Skip-gram</b> or <b>CBOW</b>. <a href="https://code.google.com/archive/p/word2vec/" target="_blank">Project page</a></div>
 </div>
+<div style="font-size:0.6em;line-height:1.42;background:#fbfbfd;border:1px solid #d9deea;border-radius:12px;padding:12px 14px;margin-bottom:10px;"><b>GloVe</b> <span style="color:#888;">(Pennington, Socher, Manning, 2014)</span><div style="margin-top:4px;">Global log-bilinear embeddings learned from <b>co-occurrence statistics</b>. <a href="http://nlp.stanford.edu/projects/glove/" target="_blank">Project page</a> &nbsp;|&nbsp; 
+<a href="https://github.com/stanfordnlp/GloVe" target="_blank">GitHub</a>
+</div>
+</div>
+<div style="font-size:0.6em;line-height:1.42;background:#fff8f0;border:1px solid #eed9b6;border-radius:12px;padding:12px 14px;"><b>fastText</b> <span style="color:#888;">(Bojanowski et al., 2017)</span><div style="margin-top:4px;">Subword-aware embeddings using <b>character n-grams</b>, useful for rare and unseen words.</div><div style="margin-top:4px;"><a href="https://fasttext.cc/" target="_blank">Project page</a></div></div></div><div style="flex:1.05;"><div style="font-size:0.6em;font-weight:800;color:#1f4ba5;margin-bottom:8px;">Popular pretrained vectors</div><div style="font-size:0.6em;line-height:1.42;background:#fbfbfd;border:1px solid #d9deea;border-radius:12px;padding:12px 14px;margin-bottom:10px;"><b>word2vec Google News
+</b>
+<div style="margin-top:4px;">Part of Google News corpus, about <b>100B words</b>. Provides <b>300-dimensional</b> vectors for about <b>3M words and phrases</b>.</div>
+</div><div style="font-size:0.6em;line-height:1.42;background:#f7f8fc;border:1px solid #d9deea;border-radius:12px;padding:12px 14px;margin-bottom:10px;"><b>GloVe releases</b><div style="margin-top:4px;">• <b>Wikipedia + Gigaword</b>: 6B tokens, 400K vocab</div><div style="margin-top:4px;">• <b>Common Crawl</b>: 42B / 840B tokens, up to 2.2M vocab</div><div style="margin-top:4px;">• <b>Twitter</b>: 2B tweets, 27B tokens</div></div><div style="font-size:0.6em;line-height:1.42;background:#fff8f0;border:1px solid #eed9b6;border-radius:12px;padding:12px 14px;"><b>Practical takeaway</b><div style="margin-top:4px;">All three produce <b>static embeddings</b>: each word type gets one fixed vector.</div><div style="margin-top:4px;">They differ mainly in how the vector is learned: <b>prediction</b> (word2vec), <b>global counts</b> (GloVe), or <b>subwords</b> (fastText).</div></div></div></div><div style="margin-top:12px;text-align:center;font-size:0.76em;font-weight:700;color:#1f4ba5;">word2vec, GloVe, and fastText are the three most widely used classic static embeddings</div>
+</section>
+
+---
+
+<section class="ppt">
+  <div class="ppt-title">References and Next Lecture</div>
+  <div class="ppt-line"></div>
+
+  <div class="ppt-body" style="display:flex; gap:24px; align-items:flex-start; margin-top:16px;">
+    <div style="flex:1.05;">
+      <div style="font-size:0.7em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Main references
+      </div>
+      <div style="font-size:0.6em; line-height:1.42; background:#f7f8fc; border:1px solid #d9deea; border-radius:12px; padding:12px 14px;">
+        <div style="margin-bottom:8px;">
+          [1] <a href="https://web.stanford.edu/~jurafsky/slp3/" target="_blank">Chapters 4 and 5 of Dan Jurafsky &amp; James H. Martin’s book</a>
+        </div>
+        <div style="margin-bottom:8px;">
+          [2] Banko, Michele, and Eric Brill.
+          <a href="https://aclanthology.org/P01-1005/" target="_blank"><i>Scaling to Very Very Large Corpora for Natural Language Disambiguation</i></a>, ACL 2001.
+        </div>
+        <div style="margin-bottom:8px;">
+          [3] Mikolov, Tomas, Kai Chen, Greg Corrado, and Jeffrey Dean.
+          <a href="papers/lecture-03-readings-1-word2vec1.pdf" target="_blank"><i>Efficient Estimation of Word Representations in Vector Space</i></a>, 2013.
+        </div>
+        <div style="margin-bottom:8px;">
+          [4] Mikolov, Tomas, Ilya Sutskever, Kai Chen, Greg Corrado, and Jeffrey Dean.
+          <a href="papers/lecture-03-readings-2-word2vec2.pdf" target="_blank"><i>Distributed Representations of Words and Phrases and their Compositionality</i></a>, NeurIPS 2013.
+        </div>
+        <div style="margin-bottom:8px;">
+          [5] Pennington, Socher, and Manning.
+          <a href="https://nlp.stanford.edu/projects/glove/" target="_blank"><i>GloVe: Global Vectors for Word Representation</i></a>, 2014.
+        </div>
+        <div>
+          [6] Bojanowski, Grave, Joulin, and Mikolov.
+          <a href="https://fasttext.cc/" target="_blank"><i>Enriching Word Vectors with Subword Information</i></a>, 2017.
+        </div>
+      </div>
+    </div>
+    <div style="flex:0.95;">
+      <div style="font-size:0.7em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Useful resources and credits
+      </div>
+      <div style="font-size:0.6em; line-height:1.42; background:#fbfbfd; border:1px solid #d9deea; border-radius:12px; padding:12px 14px; margin-bottom:12px;">
+        <div style="margin-bottom:8px;">
+          • <a href="https://lena-voita.github.io/nlp_course.html" target="_blank">Lena Voita’s NLP course</a>
+        </div>
+        <div style="margin-bottom:8px;">
+          • <a href="https://courses.cs.washington.edu/courses/csep517/20wi/slides/csep517wi20-WordEmbeddings.pdf" target="_blank">UW word embeddings slides</a>
+        </div>
+        <div style="margin-bottom:8px;">
+          • <a href="https://lena-voita.github.io/nlp_course/word_embeddings.html" target="_blank">Lena Voita’s word embeddings notes</a>
+        </div>
+        <div>
+          • Thanks to Eric Kim: <a href="https://aegis4048.github.io/" target="_blank">https://aegis4048.github.io/</a><br>
+          Some visualization ideas in the word2vec training slides are adapted from his materials.
+        </div>
+      </div>
+      <div style="font-size:0.7em; font-weight:800; color:#1f4ba5; margin-bottom:8px;">
+        Next lecture
+      </div>
+      <div style="font-size:0.6em; line-height:1.42; background:#fff8f0; border:1px solid #eed9b6; border-radius:12px; padding:14px 16px;">
+        <div style="font-size:1.08em; font-weight:800; color:#1f4ba5; margin-bottom:6px;">
+          Neural Language Models and Sequence Labeling
+        </div>
+        <div>
+          We will move from classic static embeddings to neural language models,
+          and then study sequence labeling tasks such as POS tagging and NER.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
