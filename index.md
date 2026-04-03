@@ -144,13 +144,17 @@ Use of AI coding assistants **is permitted**. However, you should explicitly att
 > - **Excercise: <a href="https://github.com/baojian/llm-26/blob/main/lecture-04-neural-lms/lecture-04-neural-lms.ipynb" target="_blank" rel="noopener">lecture-04-neural-lms.ipynb</a>**
 
 
-### Week 5 Attention Mechanisms
+### Week 5 Attention Mechanisms and Transformer
 
-Dot-product attention, Query/Key/Value intuition
+> In this lecture, we introduce the Transformer architecture.
+> - **Slides:** <a href="https://github.com/baojian/llm-26/blob/main/slides/lecture-05-slides/index.html" target="_blank" rel="noopener">Lecture 05 slides</a>
+> - **Readings:**
+>   - <a href="papers/lecture-05-readings-0-JM_Book_Chapter_7_8.pdf" target="_blank" rel="noopener">JM Book Chapter 7,8</a>
+>   - <a href="papers/lecture-05-readings-2-Decomposable-Attention-2017.pdf" target="_blank" rel="noopener">Decomposable Attention (2017)</a>
+>   - <a href="papers/lecture-05-readings-1-Transformer-paper.pdf" target="_blank" rel="noopener">Transformer (2017)</a>
+>   - <a href="papers/lecture-05-readings-3-Transformer-in-equation-2019.pdf" target="_blank" rel="noopener">Transformer in Equation (2019)</a>
+> - **Excercise: <a href="https://github.com/baojian/llm-26/blob/main/lecture-05-transformers/lecture-05-transformers.ipynb" target="_blank" rel="noopener">lecture-05-transformers.ipynb</a>**
 
-### Week 6 The Transformer Architecture
-
-Self-Attention, Multi-head, Positional Encodings, LayerNorm
 
 ### Week 7 LLM Pretraining
 
